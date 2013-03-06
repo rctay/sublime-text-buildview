@@ -1,0 +1,5 @@
+[
+	{ "keys": ["ctrl+b"], "command": "build",
+		"context": [{"key": "build_fake", "operator":"equal", "operand":true}]
+	}
+]
