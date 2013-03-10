@@ -6,9 +6,16 @@ from pipe_views import PipeViews
 class ViewGroupDecider(object):
     last_placed_group = -1
 
+    def group_other_than(self, window, view):
+        groups = window.num_groups()
+        group, _ = window.get_view_index(view)
+        group = next(i for i in range(groups) if i != group)
+        index = len(window.views_in_group(group))
+        return group, index
+
     def choose_group(self, view):
         if self.last_placed_group == -1:
-            return (0, 0)
+            return self.group_other_than(view.window(), view)
         return self.last_placed_group
 
 
