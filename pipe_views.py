@@ -11,6 +11,14 @@ class PipeViews(object):
         self.dest_view = None
         self.source_view_id = None
 
+    def create_destination(self):
+        dest_view = sublime.active_window().new_file()
+        dest_view.set_name(self.dest_view_name)
+
+        self.dest_view = dest_view
+
+        return dest_view
+
     def prepare_copy(self, source_view):
         """
         'Lock' the source view, and clear the destination view, if it exists.
@@ -24,7 +32,10 @@ class PipeViews(object):
             region = sublime.Region(0, dest_view.size())
             dest_view.erase(edit, region)
             dest_view.end_edit(edit)
-        # Creating the dest view breaks modify listening! (???)
+        else:
+            # Creating the dest view breaks modify listening; do it outside of
+            # the current call stack
+            sublime.set_timeout(self.create_destination, 100)
 
     def pipe_text(self, view):
         """
@@ -41,15 +52,12 @@ class PipeViews(object):
             # We're paranoid. Check dest view availability on every run, not just
             # on first run, in case the user closed it.
             if dest_view is None:
-                dest_view = sublime.active_window().new_file()
-                dest_view.set_name(self.dest_view_name)
+                dest_view = self.create_destination()
 
                 # Copy text before readhead
                 edit = dest_view.begin_edit()
                 dest_view.insert(edit, 0, view.substr(sublime.Region(0, prev_source_last_pos)))
                 dest_view.end_edit(edit)
-
-                self.dest_view = dest_view
 
             edit = dest_view.begin_edit()
             new_source_last_pos = view.size()
