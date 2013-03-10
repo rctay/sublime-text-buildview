@@ -4,19 +4,20 @@ from pipe_views import PipeViews
 
 
 class ViewGroupDecider(object):
-    last_placed_group = -1
+    last_placed_group = (0, 0)
+    group_to_avoid = None
 
-    def group_other_than(self, window, view):
+    def group_other_than(self, window, group):
         groups = window.num_groups()
-        group, _ = window.get_view_index(view)
         group = next(i for i in range(groups) if i != group)
-        index = len(window.views_in_group(group))
-        return group, index
+        return group, 0
 
     def choose_group(self, view):
-        if self.last_placed_group == -1:
-            return self.group_other_than(view.window(), view)
-        return self.last_placed_group
+        window = view.window()
+        group = self.last_placed_group
+        if self.group_to_avoid == group[0]:
+            group = self.group_other_than(window, self.group_to_avoid)
+        return group
 
 
 class BuildListener(sublime_plugin.EventListener,
@@ -46,6 +47,7 @@ class BuildListener(sublime_plugin.EventListener,
             return None
 
         self.view_launched_build = view
+        self.group_to_avoid = view.window().get_view_index(view)[0]
 
         window = sublime.active_window()
         self.prepare_copy(window.get_output_panel("exec"))
