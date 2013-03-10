@@ -51,6 +51,8 @@ class PipeViews(object):
 
                 self.dest_view = dest_view
 
+                self.on_view_created(dest_view)
+
             edit = dest_view.begin_edit()
             new_source_last_pos = view.size()
             region = sublime.Region(prev_source_last_pos, new_source_last_pos)
@@ -60,3 +62,6 @@ class PipeViews(object):
             self.source_last_pos = new_source_last_pos
         finally:
             self.is_running = False
+
+    def on_view_created(self, view):
+        "Hook called when the destination view is created."

@@ -2,7 +2,19 @@ import sublime, sublime_plugin
 
 from pipe_views import PipeViews
 
-class BuildListener(sublime_plugin.EventListener, PipeViews):
+
+class ViewGroupDecider(object):
+    last_placed_group = -1
+
+    def choose_group(self, view):
+        if self.last_placed_group == -1:
+            return (0, 0)
+        return self.last_placed_group
+
+
+class BuildListener(sublime_plugin.EventListener,
+        ViewGroupDecider,
+        PipeViews):
     dest_view_name = "Build output"
 
     on_modified = PipeViews.pipe_text
@@ -10,6 +22,7 @@ class BuildListener(sublime_plugin.EventListener, PipeViews):
     def on_close(self, view):
         if self.dest_view and self.dest_view.id() == view.id():
             self.dest_view = None
+            self.last_placed_group = sublime.active_window().get_view_index(view)
 
     # The technique used below of hooking on to an existing (possibly built-
     # in) command was based on kemayo's excellent work [1]. The comment
@@ -25,6 +38,8 @@ class BuildListener(sublime_plugin.EventListener, PipeViews):
         if key != "build_fake":
             return None
 
+        self.view_launched_build = view
+
         window = sublime.active_window()
         self.prepare_copy(window.get_output_panel("exec"))
 
@@ -34,3 +49,8 @@ class BuildListener(sublime_plugin.EventListener, PipeViews):
 
         return None
 
+    #
+    # Non-sublime events
+    #
+    def on_view_created(self, view):
+        view.window().set_view_index(view, *self.choose_group(view))
