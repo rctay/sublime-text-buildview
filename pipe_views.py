@@ -9,10 +9,9 @@ class PipeViews(object):
         self.is_running = False
 
         self.dest_view = None
-        self.source_view_id = None
 
-    def create_destination(self):
-        dest_view = sublime.active_window().new_file()
+    def create_destination(self, window):
+        dest_view = window.new_file()
         dest_view.set_name(self.dest_view_name)
 
         self.dest_view = dest_view
@@ -21,11 +20,10 @@ class PipeViews(object):
 
         return dest_view
 
-    def prepare_copy(self, source_view):
+    def prepare_copy(self, window):
         """
         'Lock' the source view, and clear the destination view, if it exists.
         """
-        self.source_view_id = source_view.id()
         self.source_last_pos = 0
 
         dest_view = self.dest_view
@@ -37,13 +35,15 @@ class PipeViews(object):
         else:
             # Creating the dest view breaks modify listening; do it outside of
             # the current call stack
-            sublime.set_timeout(self.create_destination, 100)
+            def fn():
+                self.create_destination(window)
+            sublime.set_timeout(fn, 100)
 
     def pipe_text(self, view):
         """
         Incrementally update the destination view.
         """
-        if self.is_running or view.id() != self.source_view_id:
+        if self.is_running:
             return
 
         self.is_running = True
