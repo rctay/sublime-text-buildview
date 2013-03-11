@@ -29,7 +29,7 @@ class PipeViews(object):
         self.source_last_pos = 0
 
         dest_view = self.dest_view
-        if dest_view:
+        if dest_view is not None:
             edit = dest_view.begin_edit()
             region = sublime.Region(0, dest_view.size())
             dest_view.erase(edit, region)
