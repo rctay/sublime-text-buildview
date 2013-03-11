@@ -14,17 +14,16 @@ class Pipe(PipeViews):
         group = next(i for i in range(groups) if i != group)
         return group, 0
 
-    def choose_group(self, view):
-        window = view.window()
+    def choose_group(self, window, view):
         group = self.last_placed_group
         if self.group_to_avoid == group[0]:
             group = self.group_other_than(window, self.group_to_avoid)
         return group
 
-    def on_view_created(self, view):
-        view.window().set_view_index(view, *self.choose_group(view))
+    def on_view_created(self, window, view):
+        window.set_view_index(view, *self.choose_group(window, view))
 
-        sublime.active_window().focus_view(self.view_launched_build)
+        window.focus_view(self.view_launched_build)
 
 
 class BuildListener(sublime_plugin.EventListener):
