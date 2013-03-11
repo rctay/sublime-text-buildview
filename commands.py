@@ -54,3 +54,5 @@ class BuildListener(sublime_plugin.EventListener,
     #
     def on_view_created(self, view):
         view.window().set_view_index(view, *self.choose_group(view))
+
+        sublime.active_window().focus_view(self.view_launched_build)
