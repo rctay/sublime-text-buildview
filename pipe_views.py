@@ -7,16 +7,22 @@ class PipeViews(object):
     def __init__(self):
         self.source_last_pos = 0
         self.is_running = False
+        self.last_scroll_region = None
 
         self.dest_view = None
 
     def create_destination(self):
         dest_view = self.window.new_file()
+
+        settings = sublime.load_settings("Preferences.sublime-settings")
+        key = settings.get("buildview_scroll", None)
+        self.scroll_setting = key if key in set(["bot", "top", "last"]) else "bot"
+
         dest_view.set_name(self.dest_view_name)
 
         self.dest_view = dest_view
 
-        self.on_view_created(self.window, dest_view)
+        self.on_view_created(self.window, dest_view, self)
 
         return dest_view
 
@@ -29,6 +35,8 @@ class PipeViews(object):
 
         dest_view = self.dest_view
         if dest_view is not None:
+            self.last_scroll_region = dest_view.viewport_position()
+
             edit = dest_view.begin_edit()
             region = sublime.Region(0, dest_view.size())
             dest_view.erase(edit, region)
@@ -70,5 +78,5 @@ class PipeViews(object):
         finally:
             self.is_running = False
 
-    def on_view_created(self, window, view):
+    def on_view_created(self, window, view, pipe):
         "Hook called when the destination view is created."
