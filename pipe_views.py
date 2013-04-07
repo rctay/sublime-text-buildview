@@ -16,7 +16,7 @@ class PipeViews(object):
 
         self.dest_view = dest_view
 
-        self.on_view_created(window, dest_view)
+        self.on_view_created(window, dest_view, self)
 
         return dest_view
 
@@ -71,5 +71,5 @@ class PipeViews(object):
         finally:
             self.is_running = False
 
-    def on_view_created(self, window, view):
+    def on_view_created(self, window, view, pipe):
         "Hook called when the destination view is created."

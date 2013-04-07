@@ -20,7 +20,7 @@ class Pipe(PipeViews):
             group = self.group_other_than(window, self.group_to_avoid)
         return group
 
-    def on_view_created(self, window, view):
+    def on_view_created(self, window, view, pipe):
         window.set_view_index(view, *self.choose_group(window, view))
 
         window.focus_view(self.view_launched_build)
