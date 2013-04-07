@@ -28,6 +28,8 @@ class PipeViews(object):
 
         dest_view = self.dest_view
         if dest_view is not None:
+            self.last_scroll_region = dest_view.viewport_position()
+
             edit = dest_view.begin_edit()
             region = sublime.Region(0, dest_view.size())
             dest_view.erase(edit, region)

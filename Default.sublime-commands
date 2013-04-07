@@ -1,0 +1,14 @@
+[
+	{
+		"caption": "Build output always at end",
+		"command": "toggle_scroll_bottom"
+	},
+	{
+		"caption": "Build output always at top",
+		"command": "toggle_scroll_top"
+	},
+	{
+		"caption": "Build output stays at same position",
+		"command": "toggle_scroll_unchanged"
+	}
+]

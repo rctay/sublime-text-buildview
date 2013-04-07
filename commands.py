@@ -2,6 +2,13 @@ import sublime, sublime_plugin
 
 from pipe_views import PipeViews
 
+def proxy_scroll_settings(pipe, view):
+    settings = view.settings()
+    settings.clear_on_change("bv_scroll")
+    def callback():
+        pipe.scroll_setting = settings.get("bv_scroll")
+    settings.add_on_change("bv_scroll", callback)
+
 
 class Pipe(PipeViews):
     dest_view_name = "Build output"
@@ -21,6 +28,8 @@ class Pipe(PipeViews):
         return group
 
     def on_view_created(self, window, view, pipe):
+        proxy_scroll_settings(pipe, view)
+
         window.set_view_index(view, *self.choose_group(window, view))
 
         window.focus_view(self.view_launched_build)
@@ -35,6 +44,14 @@ class BuildListener(sublime_plugin.EventListener):
         if pipe is None:
             return
         pipe.pipe_text(view)
+
+        scroll_pos = getattr(pipe, "scroll_setting", "bot")
+        if scroll_pos == "top":
+            pipe.dest_view.show(0)
+        elif scroll_pos == "bot":
+            pipe.dest_view.show(pipe.dest_view.size())
+        elif scroll_pos == "last":
+            pipe.dest_view.set_viewport_position(pipe.last_scroll_region)
 
     def on_close(self, view):
         for pipe in self.pipes.values():
@@ -61,6 +78,8 @@ class BuildListener(sublime_plugin.EventListener):
         source_view = window.get_output_panel("exec")
         pipe = self.pipes.setdefault(source_view.id(), Pipe())
 
+        proxy_scroll_settings(pipe, view)
+
         pipe.prepare_copy(window)
         pipe.view_launched_build = view
         pipe.group_to_avoid = window.get_view_index(view)[0]
@@ -70,3 +89,18 @@ class BuildListener(sublime_plugin.EventListener):
         sublime.set_timeout(hide_panel, 500)
 
         return None
+
+
+class ToggleScrollBottom(sublime_plugin.TextCommand):
+    def run(self, edit):
+        self.view.settings().set("bv_scroll", "bot")
+
+
+class ToggleScrollTop(sublime_plugin.TextCommand):
+    def run(self, edit):
+        self.view.settings().set("bv_scroll", "top")
+
+
+class ToggleScrollUnchanged(sublime_plugin.TextCommand):
+    def run(self, edit):
+        self.view.settings().set("bv_scroll", "last")
