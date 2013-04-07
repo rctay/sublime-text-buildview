@@ -45,7 +45,7 @@ class BuildListener(sublime_plugin.EventListener):
             return
         pipe.pipe_text(view)
 
-        scroll_pos = getattr(pipe, "scroll_setting", "bot")
+        scroll_pos = pipe.scroll_setting
         if scroll_pos == "top":
             pipe.dest_view.show(0)
         elif scroll_pos == "bot":

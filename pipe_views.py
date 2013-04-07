@@ -10,6 +10,10 @@ class PipeViews(object):
 
         self.dest_view = None
 
+        settings = sublime.load_settings("Preferences.sublime-settings")
+        key = settings.get("buildview_scroll", None)
+        self.scroll_setting = key if key in set(["bot", "top", "last"]) else "bot"
+
     def create_destination(self, window):
         dest_view = window.new_file()
         dest_view.set_name(self.dest_view_name)
