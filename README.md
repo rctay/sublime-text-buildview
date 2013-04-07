@@ -8,6 +8,9 @@ you want:
 
 ![buildview vertical](https://github.com/rctay/sublime-text-2-buildview/raw/master/buildview.png)
 
+The core functionality is done in `pipe_views.PipeViews`, an abstraction
+allowing Unix-like "pipes" to be created between Views in Sublime.
+
 # Usage
 
 The plugin hooks on to the keyboard shortcuts for launching builds; if you
@@ -25,3 +28,8 @@ accordingly, as well as adding the context key with value
  - build view is "forgotten" after restarting Sublime
 
 Pull requests welcome!
+
+# Hacking notes
+
+ - after editing `pipe_views.py`, restart Sublime or re-save `commands.py` 
+   for the changes to take effect.
