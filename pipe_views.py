@@ -10,13 +10,13 @@ class PipeViews(object):
 
         self.dest_view = None
 
-    def create_destination(self, window):
-        dest_view = window.new_file()
+    def create_destination(self):
+        dest_view = self.window.new_file()
         dest_view.set_name(self.dest_view_name)
 
         self.dest_view = dest_view
 
-        self.on_view_created(window, dest_view)
+        self.on_view_created(self.window, dest_view)
 
         return dest_view
 
@@ -24,6 +24,7 @@ class PipeViews(object):
         """
         'Lock' the source view, and clear the destination view, if it exists.
         """
+        self.window = window
         self.source_last_pos = 0
 
         dest_view = self.dest_view
@@ -35,9 +36,7 @@ class PipeViews(object):
         else:
             # Creating the dest view breaks modify listening; do it outside of
             # the current call stack
-            def fn():
-                self.create_destination(window)
-            sublime.set_timeout(fn, 100)
+            sublime.set_timeout(self.create_destination, 100)
 
     def pipe_text(self, view):
         """
