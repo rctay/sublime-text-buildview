@@ -46,7 +46,8 @@ class BuildListener(sublime_plugin.EventListener):
         pipe.pipe_text(view)
 
         scroll_pos = pipe.scroll_setting
-        if scroll_pos == "top":
+        is_first, pipe.first_run = pipe.first_run, False
+        if scroll_pos == "top" and is_first:
             pipe.dest_view.show(0)
         elif scroll_pos == "bot":
             pipe.dest_view.show(pipe.dest_view.size())
@@ -81,6 +82,7 @@ class BuildListener(sublime_plugin.EventListener):
         proxy_scroll_settings(pipe, view)
 
         pipe.prepare_copy(window)
+        pipe.first_run = True
         pipe.view_launched_build = view
         pipe.group_to_avoid = window.get_view_index(view)[0]
 
