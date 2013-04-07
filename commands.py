@@ -51,7 +51,7 @@ class BuildListener(sublime_plugin.EventListener):
             pipe.dest_view.show(0)
         elif scroll_pos == "bot":
             pipe.dest_view.show(pipe.dest_view.size())
-        elif scroll_pos == "last":
+        elif scroll_pos == "last" and pipe.last_scroll_region is not None:
             pipe.dest_view.set_viewport_position(pipe.last_scroll_region)
 
     def on_close(self, view):

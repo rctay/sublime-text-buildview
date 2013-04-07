@@ -7,6 +7,7 @@ class PipeViews(object):
     def __init__(self):
         self.source_last_pos = 0
         self.is_running = False
+        self.last_scroll_region = None
 
         self.dest_view = None
 
