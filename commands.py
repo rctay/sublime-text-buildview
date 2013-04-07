@@ -52,7 +52,9 @@ class BuildListener(sublime_plugin.EventListener):
         elif scroll_pos == "bot":
             pipe.dest_view.show(pipe.dest_view.size())
         elif scroll_pos == "last" and pipe.last_scroll_region is not None:
-            pipe.dest_view.set_viewport_position(pipe.last_scroll_region)
+            def fn():
+                pipe.dest_view.set_viewport_position(pipe.last_scroll_region)
+            sublime.set_timeout(fn, 500)
 
     def on_close(self, view):
         for pipe in self.pipes.values():
