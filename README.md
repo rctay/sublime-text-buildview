@@ -20,15 +20,15 @@ accordingly, as well as adding the context key with value
 	"context": [{"key": "build_fake", "operator":"equal", "operand":true}]
 
 The plugin can scroll the output to the top, bottom, or the position before
-the current build was launched. This can be specified by triggering the
-Command Palette in *any* view (view with build output or with source code)
-in the window, and selecting one of
+the current build was launched. (The default is to scroll to the bottom.)
+This can be specified by triggering the Command Palette in *any* view (view
+with build output or with source code) in the window, and selecting one of
 
  - Build output always at top
  - Build output always at end
  - Build output stays at same position
 
-A default setting can also be specified. It is read as the value to the key
+The default setting can also be specified. It is read as the value to the key
 `buildview_scroll` from Sublime's Settings (ie. user/default
 `Preferences.sublime-settings`) and is one of
 
