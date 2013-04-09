@@ -16,7 +16,7 @@ class PipeViews(object):
 
         settings = sublime.load_settings("Preferences.sublime-settings")
         key = settings.get("buildview_scroll", None)
-        self.scroll_setting = key if key in set(["bot", "top", "last"]) else "bot"
+        self.scroll_setting = key if key in set(["bottom", "top", "last"]) else "bottom"
 
         dest_view.set_name(self.dest_view_name)
 

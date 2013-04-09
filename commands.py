@@ -49,7 +49,7 @@ class BuildListener(sublime_plugin.EventListener):
         is_first, pipe.first_run = pipe.first_run, False
         if scroll_pos == "top" and is_first:
             pipe.dest_view.show(0)
-        elif scroll_pos == "bot":
+        elif scroll_pos == "bottom":
             pipe.dest_view.show(pipe.dest_view.size())
         elif scroll_pos == "last" and pipe.last_scroll_region is not None:
             def fn():
@@ -97,7 +97,7 @@ class BuildListener(sublime_plugin.EventListener):
 
 class ToggleScrollBottom(sublime_plugin.TextCommand):
     def run(self, edit):
-        self.view.settings().set("bv_scroll", "bot")
+        self.view.settings().set("bv_scroll", "bottom")
 
 
 class ToggleScrollTop(sublime_plugin.TextCommand):
