@@ -79,9 +79,12 @@ class BuildListener(sublime_plugin.EventListener):
         window = view.window()
 
         source_view = window.get_output_panel("exec")
-        pipe = self.pipes.setdefault(source_view.id(), Pipe())
+        pipe = self.pipes.get(source_view.id())
+        if not pipe:
+            pipe = Pipe()
+            self.pipes[source_view.id()] = pipe
 
-        proxy_scroll_settings(pipe, view)
+            proxy_scroll_settings(pipe, view)
 
         pipe.prepare_copy(window)
         pipe.first_run = True
