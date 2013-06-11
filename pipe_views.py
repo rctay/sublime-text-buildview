@@ -9,6 +9,8 @@ class PipeViews(object):
         self.is_running = False
         self.last_scroll_region = None
 
+        self.enabled_setting = True
+
         self.dest_view = None
 
     def create_destination(self):

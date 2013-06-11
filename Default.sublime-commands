@@ -10,5 +10,9 @@
 	{
 		"caption": "Build output stays at same position",
 		"command": "toggle_scroll_unchanged"
+	},
+	{
+		"caption": "Disable/Enable buildview for this window",
+		"command": "toggle_enabled"
 	}
 ]

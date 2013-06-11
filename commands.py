@@ -2,12 +2,20 @@ import sublime, sublime_plugin
 
 from pipe_views import PipeViews
 
-def proxy_scroll_settings(pipe, view):
+def proxy_settings(pipe, view):
     settings = view.settings()
+
+    # scrolling
     settings.clear_on_change("bv_scroll")
-    def callback():
+    def scroll_callback():
         pipe.scroll_setting = settings.get("bv_scroll")
-    settings.add_on_change("bv_scroll", callback)
+    settings.add_on_change("bv_scroll", scroll_callback)
+
+    # enabled
+    settings.clear_on_change("bv_enabled")
+    def enabled_callback():
+        pipe.enabled_setting = settings.get("bv_enabled")
+    settings.add_on_change("bv_enabled", enabled_callback)
 
 
 class Pipe(PipeViews):
@@ -28,7 +36,7 @@ class Pipe(PipeViews):
         return group
 
     def on_view_created(self, window, view, pipe):
-        proxy_scroll_settings(pipe, view)
+        proxy_settings(pipe, view)
 
         window.set_view_index(view, *self.choose_group(window, view))
 
@@ -41,7 +49,7 @@ class BuildListener(sublime_plugin.EventListener):
 
     def on_modified(self, view):
         pipe = self.pipes.get(view.id(), None)
-        if pipe is None:
+        if pipe is None or not pipe.enabled_setting:
             return
         pipe.pipe_text(view)
 
@@ -73,7 +81,7 @@ class BuildListener(sublime_plugin.EventListener):
     # to re-implement the copy and cut commands. (Important, since
     # run_command("copy") doesn't do anything.)
     def on_query_context(self, view, key, *args):
-        if key != "build_fake":
+        if key != "build_fake" or not view.settings().get("bv_enabled", True):
             return None
 
         window = view.window()
@@ -84,7 +92,7 @@ class BuildListener(sublime_plugin.EventListener):
             pipe = Pipe()
             self.pipes[source_view.id()] = pipe
 
-            proxy_scroll_settings(pipe, view)
+            proxy_settings(pipe, view)
 
         pipe.prepare_copy(window)
         pipe.first_run = True
@@ -111,3 +119,9 @@ class ToggleScrollTop(sublime_plugin.TextCommand):
 class ToggleScrollUnchanged(sublime_plugin.TextCommand):
     def run(self, edit):
         self.view.settings().set("bv_scroll", "last")
+
+
+class ToggleEnabled(sublime_plugin.TextCommand):
+    def run(self, edit):
+        s = self.view.settings()
+        s.set("bv_enabled", not s.get("bv_enabled", True))

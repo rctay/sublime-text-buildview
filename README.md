@@ -19,6 +19,8 @@ accordingly, as well as adding the context key with value
 
 	"context": [{"key": "build_fake", "operator":"equal", "operand":true}]
 
+## Output scrolling
+
 The plugin can scroll the output to the top, bottom, or the position before
 the current build was launched. (The default is to scroll to the bottom.)
 This can be specified by triggering the Command Palette in *any* view (view
@@ -36,12 +38,20 @@ The default setting can also be specified. It is read as the value to the key
  - `bottom`
  - `last`
 
+ ## Disabling
+
+ The plugin can be disabled on a per-view basis by triggering the Command
+ Palette in either the view with build output or with source code and selecting
+
+ - Disable/Enable buildview for this window
+
 # Issues/TODO
 
  - build view does not gain focus if it is in the same tab group as the view
    that launched the build
  - pin/unpin location, so that subsequent builds scrolls to the same location
  - build view is "forgotten" after restarting Sublime
+ - improve disabling/enabling options (eg whitelists, blacklists)
 
 Pull requests welcome!
 
