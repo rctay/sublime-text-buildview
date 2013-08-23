@@ -38,10 +38,10 @@ The default setting can also be specified. It is read as the value to the key
  - `bottom`
  - `last`
 
- ## Disabling
+## Disabling
 
- The plugin can be disabled on a per-view basis by triggering the Command
- Palette in either the view with build output or with source code and selecting
+The plugin can be disabled on a per-view basis by triggering the Command
+Palette in either the view with build output or with source code and selecting
 
  - Disable/Enable buildview for this window
 
