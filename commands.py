@@ -4,8 +4,12 @@ from pipe_views import PipeViews
 
 def set_settings_listener(receiver, r_key, settings, s_key):
     settings.clear_on_change(s_key)
+    not_found = object()
     def callback():
-        setattr(receiver, r_key, settings.get(s_key))
+        val = settings.get(s_key, not_found)
+        if val == not_found:
+            return
+        setattr(receiver, r_key, val)
     settings.add_on_change(s_key, callback)
 
 def proxy_settings(pipe, view):
