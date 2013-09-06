@@ -9,7 +9,9 @@ class ViewGroupDecider(object):
     def group_other_than(self, window, view):
         groups = window.num_groups()
         group, _ = window.get_view_index(view)
-        group = next(i for i in range(groups) if i != group)
+        for i in range(groups):
+            if i != group:
+                group = i
         index = len(window.views_in_group(group))
         return group, index
 
