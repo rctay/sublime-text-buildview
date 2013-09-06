@@ -1,0 +1,5 @@
+Improvements:
+ - silence StopIteration when only one pane was open
+
+Fixes:
+ - build view in its own window remains 'alive'
