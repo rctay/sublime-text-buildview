@@ -2,20 +2,20 @@ import sublime, sublime_plugin
 
 from pipe_views import PipeViews
 
+def set_settings_listener(receiver, r_key, settings, s_key):
+    settings.clear_on_change(s_key)
+    def callback():
+        setattr(receiver, r_key, settings.get(s_key))
+    settings.add_on_change(s_key, callback)
+
 def proxy_settings(pipe, view):
     settings = view.settings()
 
     # scrolling
-    settings.clear_on_change("bv_scroll")
-    def scroll_callback():
-        pipe.scroll_setting = settings.get("bv_scroll")
-    settings.add_on_change("bv_scroll", scroll_callback)
+    set_settings_listener(pipe, "scroll_setting", settings, "bv_scroll")
 
     # enabled
-    settings.clear_on_change("bv_enabled")
-    def enabled_callback():
-        pipe.enabled_setting = settings.get("bv_enabled")
-    settings.add_on_change("bv_enabled", enabled_callback)
+    set_settings_listener(pipe, "enabled_setting", settings, "bv_enabled")
 
 
 class Pipe(PipeViews):
