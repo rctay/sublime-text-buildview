@@ -8,6 +8,10 @@ you want:
 
 ![buildview vertical](https://github.com/rctay/sublime-text-2-buildview/raw/master/buildview.png)
 
+This is super useful if you are repeatedly running a program on your code/
+script and want to have its output handy. (You probably already have a
+`.sublime-build` or `build_systems` entry in your `.sublime-project`.)
+
 The core functionality is done in `pipe_views.PipeViews`, an abstraction
 allowing Unix-like "pipes" to be created between Views in Sublime.
 
