@@ -59,3 +59,11 @@ Pull requests welcome!
 
  - after editing `pipe_views.py`, restart Sublime or re-save `commands.py` 
    for the changes to take effect.
+ - _who's view is it anyway?_ A variety of names are used for views in the
+   source code, according to their different roles:
+   - source view: the built-in view that shows up when you click Show Build
+     Results
+   - destination view: the view that mirrors the build output, the one with the
+     title "Build Output"
+   - otherwise, a view should generally refer to one holding the source for the
+     build
