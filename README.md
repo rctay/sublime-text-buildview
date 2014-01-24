@@ -38,6 +38,14 @@ The default is to scroll to the bottom. You can change this by specifying
  - `bottom`
  - `last`
 
+For example:
+
+    {
+    	...
+    	"buildview_scroll": "top",
+    	...
+    }
+
 ## Disabling
 
 The plugin can be disabled on a per-view basis by triggering the Command
