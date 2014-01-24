@@ -1,5 +1,8 @@
 # A Sublime Text 2 plugin to show build output in a view.
 
+[![Flattr this!](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=rctay&url=https://github.com/rctay/sublime-text-2-buildview&title=sublime-text-2-buildview&category=software)  
+[![Gittip me!](https://www.gittip.com/assets/-/logo.png)](https://www.gittip.com/rctay/)
+
 In Sublime Text 2, build results are shown in a fixed horizontal panel; you
 can't drag it to put it vertically next to your code, like in Eclipse, VS.
 
@@ -79,3 +82,9 @@ Pull requests welcome!
      title "Build Output"
    - otherwise, a view should generally refer to one holding the source for the
      build
+
+# Donate
+
+If you liked this plugin, you can donate here:  
+[![Flattr this!](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=rctay&url=https://github.com/rctay/sublime-text-2-buildview&title=sublime-text-2-buildview&category=software)  
+[![Gittip me!](https://www.gittip.com/assets/-/logo.png)](https://www.gittip.com/rctay/)
