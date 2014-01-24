@@ -63,9 +63,7 @@ class PipeViews(object):
                 dest_view = self.create_destination()
 
                 # Copy text before readhead
-                edit = dest_view.begin_edit()
-                dest_view.insert(edit, 0, view.substr(sublime.Region(0, prev_source_last_pos)))
-                dest_view.end_edit(edit)
+                dest_view.run_command('content_prepend', {'text': view.substr(sublime.Region(0, prev_source_last_pos))})
 
             new_source_last_pos = view.size()
             region = sublime.Region(prev_source_last_pos, new_source_last_pos)
@@ -89,3 +87,8 @@ class ContentReplace(sublime_plugin.TextCommand):
     def run(self, edit, start, end, text):
         region = sublime.Region(start, end)
         self.view.replace(edit, region, text)
+
+
+class ContentPrepend(sublime_plugin.TextCommand):
+    def run(self, edit, text):
+        self.view.insert(edit, 0, text)
