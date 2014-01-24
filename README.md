@@ -22,7 +22,7 @@ accordingly. These bindings **must** have the following context:
 ## Output scrolling
 
 The plugin can scroll the output to the top, bottom, or the position before
-the current build was launched. (The default is to scroll to the bottom.)
+the current build was launched.
 This can be specified by triggering the Command Palette in *any* view (view
 with build output or with source code) in the window, and selecting one of
 
@@ -30,9 +30,9 @@ with build output or with source code) in the window, and selecting one of
     Build output always at end
     Build output stays at same position
 
-The default setting can also be specified. It is read as the value to the key
-`buildview_scroll` from Sublime's Settings (ie. user/default
-`Preferences.sublime-settings`) and is one of
+The default is to scroll to the bottom. You can change this by specifying
+`buildview_scroll` in Sublime Text's Settings (ie. user/default
+`Preferences.sublime-settings`). It should be one of these strings:
 
  - `top`
  - `bottom`
