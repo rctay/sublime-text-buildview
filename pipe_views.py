@@ -7,14 +7,10 @@ class PipeViews(object):
     def __setattr__(self, name, value):
         if name is "enabled_setting":
             value = value is None or value
-            object.__setattr__(self, name, value)
-            return
         elif name is "scroll_setting":
             value = value if value in set(["bottom", "top", "last"]) else "bottom"
-            object.__setattr__(self, name, value)
-            return
 
-        return super(PipeViews, self).__setattr__(name, value)
+        object.__setattr__(self, name, value)
 
     def __init__(self):
         self.source_last_pos = 0
