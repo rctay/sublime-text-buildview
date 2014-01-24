@@ -26,9 +26,9 @@ the current build was launched. (The default is to scroll to the bottom.)
 This can be specified by triggering the Command Palette in *any* view (view
 with build output or with source code) in the window, and selecting one of
 
- - Build output always at top
- - Build output always at end
- - Build output stays at same position
+    Build output always at top
+    Build output always at end
+    Build output stays at same position
 
 The default setting can also be specified. It is read as the value to the key
 `buildview_scroll` from Sublime's Settings (ie. user/default
@@ -43,7 +43,7 @@ The default setting can also be specified. It is read as the value to the key
 The plugin can be disabled on a per-view basis by triggering the Command
 Palette in either the view with build output or with source code and selecting
 
- - Disable/Enable buildview for this window
+    Disable/Enable buildview for this window
 
 # Issues/TODO
 
