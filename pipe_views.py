@@ -4,12 +4,26 @@ import sublime
 class PipeViews(object):
     dest_view_name = "Dest"
 
+    def __setattr__(self, name, value):
+        if name is "enabled_setting":
+            value = value is None or value
+            object.__setattr__(self, name, value)
+            return
+        elif name is "scroll_setting":
+            value = value if value in set(["bottom", "top", "last"]) else "bottom"
+            object.__setattr__(self, name, value)
+            return
+
+        return super(PipeViews, self).__setattr__(name, value)
+
     def __init__(self):
         self.source_last_pos = 0
         self.is_running = False
         self.last_scroll_region = None
 
-        self.enabled_setting = True
+        # just use None, our internal cleanup ensures sane values anyway
+        self.enabled_setting = None
+        self.scroll_setting = None
 
         self.dest_view = None
 
@@ -18,7 +32,7 @@ class PipeViews(object):
 
         settings = sublime.load_settings("Preferences.sublime-settings")
         key = settings.get("buildview_scroll", None)
-        self.scroll_setting = key if key in set(["bottom", "top", "last"]) else "bottom"
+        self.scroll_setting = key
 
         dest_view.set_name(self.dest_view_name)
 
