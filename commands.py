@@ -1,6 +1,9 @@
 import sublime, sublime_plugin
 
-from pipe_views import PipeViews
+if sublime.version().startswith('3'):
+    from .pipe_views import PipeViews
+else:
+    from pipe_views import PipeViews
 
 def set_settings_listener(receiver, r_key, settings, s_key):
     settings.clear_on_change(s_key)
