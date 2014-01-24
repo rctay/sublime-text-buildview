@@ -67,11 +67,9 @@ class PipeViews(object):
                 dest_view.insert(edit, 0, view.substr(sublime.Region(0, prev_source_last_pos)))
                 dest_view.end_edit(edit)
 
-            edit = dest_view.begin_edit()
             new_source_last_pos = view.size()
             region = sublime.Region(prev_source_last_pos, new_source_last_pos)
-            dest_view.replace(edit, region, view.substr(region))
-            dest_view.end_edit(edit)
+            dest_view.run_command('content_replace', {'start': prev_source_last_pos, 'end': new_source_last_pos, 'text': view.substr(region)})
 
             self.source_last_pos = new_source_last_pos
         finally:
@@ -85,3 +83,9 @@ class ContentClear(sublime_plugin.TextCommand):
     def run(self, edit):
         region = sublime.Region(0, self.view.size())
         self.view.erase(edit, region)
+
+
+class ContentReplace(sublime_plugin.TextCommand):
+    def run(self, edit, start, end, text):
+        region = sublime.Region(start, end)
+        self.view.replace(edit, region, text)
