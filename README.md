@@ -15,7 +15,7 @@ allowing Unix-like "pipes" to be created between Views in Sublime.
 
 The plugin hooks on to the keyboard shortcuts for launching builds; if you
 have different shortcuts for them, change the `.sublime-keymap` files
-accordingly, as well as adding the context key with value
+accordingly. These bindings **must** have the following context:
 
 	"context": [{"key": "build_fake", "operator":"equal", "operand":true}]
 
