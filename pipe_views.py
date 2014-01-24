@@ -1,4 +1,4 @@
-import sublime
+import sublime, sublime_plugin
 
 
 class PipeViews(object):
@@ -39,10 +39,7 @@ class PipeViews(object):
         if dest_view is not None:
             self.last_scroll_region = dest_view.viewport_position()
 
-            edit = dest_view.begin_edit()
-            region = sublime.Region(0, dest_view.size())
-            dest_view.erase(edit, region)
-            dest_view.end_edit(edit)
+            dest_view.run_command('content_clear')
         else:
             # Creating the dest view breaks modify listening; do it outside of
             # the current call stack
@@ -82,3 +79,9 @@ class PipeViews(object):
 
     def on_view_created(self, window, view, pipe):
         "Hook called when the destination view is created."
+
+
+class ContentClear(sublime_plugin.TextCommand):
+    def run(self, edit):
+        region = sublime.Region(0, self.view.size())
+        self.view.erase(edit, region)
