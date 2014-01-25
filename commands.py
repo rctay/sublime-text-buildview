@@ -28,12 +28,6 @@ class PlacementPolicy1(object):
     using the group where the source code view is in.
     """
     last_placed_group = (0, 0)
-    group_to_avoid = None
-
-    def __group_other_than(self, window, group):
-        groups = window.num_groups()
-        group = next((i for i in range(groups) if i != group), group)
-        return group, 0
 
     def choose_group(self, window, view):
         """
@@ -41,8 +35,11 @@ class PlacementPolicy1(object):
         sublime.View.get_view_index()/set_view_index()
         """
         group = self.last_placed_group
-        if self.group_to_avoid == group[0]:
-            group = self.__group_other_than(window, self.group_to_avoid)
+        group_to_avoid = window.get_view_index(view)[0]
+        if group_to_avoid == group[0]:
+            groups = window.num_groups()
+            new_group = next((i for i in range(groups) if i != group_to_avoid), group_to_avoid)
+            group = (new_group, group[1])
         return group
 
 
@@ -52,7 +49,7 @@ class Pipe(PlacementPolicy1, PipeViews):
     def on_view_created(self, window, view, pipe):
         proxy_settings(pipe, view)
 
-        window.set_view_index(view, *self.choose_group(window, view))
+        window.set_view_index(view, *self.choose_group(window, self.view_launched_build))
 
         window.focus_view(self.view_launched_build)
 
@@ -111,7 +108,6 @@ class BuildListener(sublime_plugin.EventListener):
         pipe.prepare_copy(window)
         pipe.first_run = True
         pipe.view_launched_build = view
-        pipe.group_to_avoid = window.get_view_index(view)[0]
 
         def hide_panel():
             window.run_command("hide_panel")
