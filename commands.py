@@ -30,9 +30,7 @@ class Pipe(PipeViews):
 
     def group_other_than(self, window, group):
         groups = window.num_groups()
-        for i in range(groups):
-            if i != group:
-                group = i
+        group = next((i for i in range(groups) if i != group), group)
         return group, 0
 
     def choose_group(self, window, view):
