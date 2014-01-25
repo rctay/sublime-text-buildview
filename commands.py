@@ -22,22 +22,32 @@ def proxy_settings(pipe, view):
     set_settings_listener(pipe, "enabled_setting", settings, "bv_enabled")
 
 
-class Pipe(PipeViews):
-    dest_view_name = "Build output"
-
+class PlacementPolicy1(object):
+    """
+    Prefer the group where the build view was last (closed) in; but also avoid
+    using the group where the source code view is in.
+    """
     last_placed_group = (0, 0)
     group_to_avoid = None
 
-    def group_other_than(self, window, group):
+    def __group_other_than(self, window, group):
         groups = window.num_groups()
         group = next((i for i in range(groups) if i != group), group)
         return group, 0
 
     def choose_group(self, window, view):
+        """
+        Returns a tuple (group, index), corresponding to
+        sublime.View.get_view_index()/set_view_index()
+        """
         group = self.last_placed_group
         if self.group_to_avoid == group[0]:
-            group = self.group_other_than(window, self.group_to_avoid)
+            group = self.__group_other_than(window, self.group_to_avoid)
         return group
+
+
+class Pipe(PlacementPolicy1, PipeViews):
+    dest_view_name = "Build output"
 
     def on_view_created(self, window, view, pipe):
         proxy_settings(pipe, view)
