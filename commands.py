@@ -34,13 +34,12 @@ class PlacementPolicy1(object):
         Returns a tuple (group, index), corresponding to
         sublime.View.get_view_index()/set_view_index()
         """
-        group = self.last_placed_group
+        group_index, view_index = self.last_placed_group
         group_to_avoid = window.get_view_index(view)[0]
-        if group_to_avoid == group[0]:
+        if group_to_avoid == group_index:
             groups = window.num_groups()
-            new_group = next((i for i in range(groups) if i != group_to_avoid), group_to_avoid)
-            group = (new_group, group[1])
-        return group
+            group_index = next((i for i in range(groups) if i != group_to_avoid), group_to_avoid)
+        return group_index, view_index
 
 
 class Pipe(PlacementPolicy1, PipeViews):
