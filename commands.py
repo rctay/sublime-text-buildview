@@ -60,8 +60,8 @@ class BuildListener(sublime_plugin.EventListener):
         pipe.pipe_text(view)
 
         scroll_pos = pipe.scroll_setting
-        is_first, pipe.first_run = pipe.first_run, False
-        if scroll_pos == "top" and is_first:
+        if scroll_pos == "top" and pipe.first_run:
+            pipe.first_run = False
             pipe.dest_view.show(0)
         elif scroll_pos == "bottom":
             pipe.dest_view.show(pipe.dest_view.size())
