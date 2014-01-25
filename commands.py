@@ -24,21 +24,39 @@ def proxy_settings(pipe, view):
 
 class PlacementPolicy1(object):
     """
-    Prefer the group where the build view was last (closed) in; but also avoid
-    using the group where the source code view is in.
+    Use the (group, index) where the build view was last (closed) in; 
+    if we haven't had a build view yet, 
+      if the windows has more than one group,
+        use the first group that doesn't hold the source view;
+        otherwise, place the build view next to the source view (on the right)
     """
-    last_placed_group = (0, 0)
+    last_placed_group = None
 
     def choose_group(self, window, view):
         """
         Returns a tuple (group, index), corresponding to
         sublime.View.get_view_index()/set_view_index()
         """
-        group_index, view_index = self.last_placed_group
-        group_to_avoid = window.get_view_index(view)[0]
-        if group_to_avoid == group_index:
-            groups = window.num_groups()
-            group_index = next((i for i in range(groups) if i != group_to_avoid), group_to_avoid)
+
+        source_group_index, source_view_index = window.get_view_index(view)
+
+        if self.last_placed_group is not None:
+            group_index, view_index = self.last_placed_group
+        else:
+            num_groups = window.num_groups()
+            if num_groups == 1:
+                place_to_side = True
+            else:
+                group_index = next((i for i in range(num_groups) if i != source_group_index), None)
+                if group_index is None:
+                    place_to_side = True
+                else:
+                    view_index = 0
+                    place_to_side = False
+
+            if place_to_side:
+                group_index = source_group_index
+                view_index = source_view_index + 1
 
         # sublime refuses to place view into group_index if view_index exceeds
         # number of views in that group
