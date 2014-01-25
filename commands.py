@@ -39,6 +39,11 @@ class PlacementPolicy1(object):
         if group_to_avoid == group_index:
             groups = window.num_groups()
             group_index = next((i for i in range(groups) if i != group_to_avoid), group_to_avoid)
+
+        # sublime refuses to place view into group_index if view_index exceeds
+        # number of views in that group
+        view_index = min(view_index, len(window.views_in_group(group_index)))
+
         return group_index, view_index
 
 
