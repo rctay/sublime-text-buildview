@@ -27,6 +27,9 @@ class PlacementPolicy1(object):
       if the windows has more than one group,
         use the first group that doesn't hold the source view;
         otherwise, place the build view next to the source view (on the right)
+
+    Note: re-placing the build view at last-closed position does not work on
+    Sublime Text 3.
     """
     last_placed_group = None
 
@@ -38,7 +41,7 @@ class PlacementPolicy1(object):
 
         source_group_index, source_view_index = window.get_view_index(view)
 
-        if self.last_placed_group is not None:
+        if self.last_placed_group is not None and self.last_placed_group != (-1, -1):
             group_index, view_index = self.last_placed_group
         else:
             num_groups = window.num_groups()
@@ -107,6 +110,10 @@ class BuildListener(sublime_plugin.EventListener):
         for pipe in self.pipes.values():
             if pipe.dest_view and pipe.dest_view.id() == view.id():
                 pipe.dest_view = None
+                # view.window() does not work; so we use
+                # sublime.active_window(). But this again doesn't work on
+                # Sublime Text 3; it returns (-1, -1). Assigning is safe
+                # because (-1, -1) is treated as a null element.
                 pipe.last_placed_group = sublime.active_window().get_view_index(view)
 
     # The technique used below of hooking on to an existing (possibly built-
