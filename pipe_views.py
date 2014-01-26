@@ -15,6 +15,8 @@ class PipeViews(object):
     def __init__(self):
         self.source_last_pos = 0
         self.is_running = False
+        self.prepare_create = False
+        self.buffer = ''
         self.last_scroll_region = None
 
         # just use None, our internal cleanup ensures sane values anyway
@@ -51,10 +53,15 @@ class PipeViews(object):
 
             dest_view.run_command('content_clear')
         else:
+            self.buffer = ''
+            self.prepare_create = True
+
             # Creating the dest view breaks modify listening; do it outside of
             # the current call stack
             def fn():
-                self.create_destination()
+                dest_view = self.create_destination()
+                dest_view.run_command('content_prepend', {'text': self.buffer})
+                self.prepare_create = False
                 if on_create_complete:
                     on_create_complete()
             sublime.set_timeout(fn, 100)
@@ -74,6 +81,14 @@ class PipeViews(object):
             # We're paranoid. Check dest view availability on every run, not just
             # on first run, in case the user closed it.
             if dest_view is None:
+                if self.prepare_create:
+                    new_source_last_pos = view.size()
+                    region = sublime.Region(prev_source_last_pos, new_source_last_pos)
+                    self.buffer += view.substr(region)
+
+                    self.source_last_pos = new_source_last_pos
+                    return
+
                 dest_view = self.create_destination()
 
                 # Copy text before readhead

@@ -82,7 +82,13 @@ class BuildListener(sublime_plugin.EventListener):
         pipe = self.pipes.get(view.id(), None)
         if pipe is None or not pipe.enabled_setting:
             return
+
         pipe.pipe_text(view)
+
+        # dest_view has not been created; don't continue on to setting scroll
+        # position, etc.
+        if pipe.prepare_create:
+            return
 
         scroll_pos = pipe.scroll_setting
         if scroll_pos == "top" and pipe.first_update:
