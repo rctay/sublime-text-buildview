@@ -1,14 +1,14 @@
 import sublime, sublime_plugin
 
-from pipe_views import PipeViews
+if sublime.version().startswith('3'):
+    from .pipe_views import PipeViews
+else:
+    from pipe_views import PipeViews
 
 def set_settings_listener(receiver, r_key, settings, s_key):
     settings.clear_on_change(s_key)
-    not_found = object()
-    def callback():
-        val = settings.get(s_key, not_found)
-        if val == not_found:
-            return
+    def callback(*args):
+        val = settings.get(s_key)
         setattr(receiver, r_key, val)
     settings.add_on_change(s_key, callback)
 

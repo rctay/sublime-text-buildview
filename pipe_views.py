@@ -1,4 +1,4 @@
-import sublime
+import sublime, sublime_plugin
 
 
 class PipeViews(object):
@@ -49,10 +49,7 @@ class PipeViews(object):
         if dest_view is not None:
             self.last_scroll_region = dest_view.viewport_position()
 
-            edit = dest_view.begin_edit()
-            region = sublime.Region(0, dest_view.size())
-            dest_view.erase(edit, region)
-            dest_view.end_edit(edit)
+            dest_view.run_command('content_clear')
         else:
             # Creating the dest view breaks modify listening; do it outside of
             # the current call stack
@@ -76,15 +73,11 @@ class PipeViews(object):
                 dest_view = self.create_destination()
 
                 # Copy text before readhead
-                edit = dest_view.begin_edit()
-                dest_view.insert(edit, 0, view.substr(sublime.Region(0, prev_source_last_pos)))
-                dest_view.end_edit(edit)
+                dest_view.run_command('content_prepend', {'text': view.substr(sublime.Region(0, prev_source_last_pos))})
 
-            edit = dest_view.begin_edit()
             new_source_last_pos = view.size()
             region = sublime.Region(prev_source_last_pos, new_source_last_pos)
-            dest_view.replace(edit, region, view.substr(region))
-            dest_view.end_edit(edit)
+            dest_view.run_command('content_replace', {'start': prev_source_last_pos, 'end': new_source_last_pos, 'text': view.substr(region)})
 
             self.source_last_pos = new_source_last_pos
         finally:
@@ -92,3 +85,20 @@ class PipeViews(object):
 
     def on_view_created(self, window, view, pipe):
         "Hook called when the destination view is created."
+
+
+class ContentClear(sublime_plugin.TextCommand):
+    def run(self, edit):
+        region = sublime.Region(0, self.view.size())
+        self.view.erase(edit, region)
+
+
+class ContentReplace(sublime_plugin.TextCommand):
+    def run(self, edit, start, end, text):
+        region = sublime.Region(start, end)
+        self.view.replace(edit, region, text)
+
+
+class ContentPrepend(sublime_plugin.TextCommand):
+    def run(self, edit, text):
+        self.view.insert(edit, 0, text)
