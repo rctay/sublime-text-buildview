@@ -49,7 +49,9 @@ class PlacementPolicy1(object):
                 if group_index is None:
                     place_to_side = True
                 else:
-                    view_index = 0
+                    active_view = window.active_view_in_group(group_index)
+                    _, view_index = window.get_view_index(active_view)
+                    view_index += 1
                     place_to_side = False
 
             if place_to_side:
