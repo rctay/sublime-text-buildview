@@ -15,9 +15,7 @@ def set_settings_listener(receiver, r_key, settings, s_key):
         setattr(receiver, r_key, val)
     settings.add_on_change(s_key, callback)
 
-def proxy_settings(pipe, view):
-    settings = view.settings()
-
+def proxy_settings(pipe, settings):
     # scrolling
     set_settings_listener(pipe, "scroll_setting", settings, "bv_scroll")
 
@@ -45,7 +43,7 @@ class Pipe(PipeViews):
         return group
 
     def on_view_created(self, window, view, pipe):
-        proxy_settings(pipe, view)
+        proxy_settings(pipe, view.settings())
 
         window.set_view_index(view, *self.choose_group(window, view))
 
@@ -101,7 +99,7 @@ class BuildListener(sublime_plugin.EventListener):
             pipe = Pipe()
             self.pipes[source_view.id()] = pipe
 
-            proxy_settings(pipe, view)
+            proxy_settings(pipe, view.settings())
 
         pipe.prepare_copy(window)
         pipe.first_run = True
