@@ -74,9 +74,12 @@ class Pipe(PlacementPolicy1, PipeViews):
     def on_view_created(self, window, view, pipe):
         proxy_settings(pipe, view.settings())
 
-        window.set_view_index(view, *self.choose_group(window, self.view_launched_build))
+        group_index, view_index = self.choose_group(window, self.view_launched_build)
+        window.set_view_index(view, group_index, view_index)
 
-        window.focus_view(self.view_launched_build)
+        source_group_index, _ = window.get_view_index(self.view_launched_build)
+        if source_group_index != group_index:
+            window.focus_view(self.view_launched_build)
 
 
 class BuildListener(sublime_plugin.EventListener):

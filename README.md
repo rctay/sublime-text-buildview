@@ -61,8 +61,6 @@ Palette in either the view with build output or with source code and selecting
 
 # Issues/TODO
 
- - build view does not gain focus if it is in the same tab group as the view
-   that launched the build
  - pin/unpin location, so that subsequent builds scrolls to the same location
  - build view is "forgotten" after restarting Sublime
  - improve disabling/enabling options (eg whitelists, blacklists)
