@@ -38,7 +38,7 @@ class PipeViews(object):
 
         return dest_view
 
-    def prepare_copy(self, window):
+    def prepare_copy(self, window, on_create_complete=None):
         """
         'Lock' the source view, and clear the destination view, if it exists.
         """
@@ -53,7 +53,11 @@ class PipeViews(object):
         else:
             # Creating the dest view breaks modify listening; do it outside of
             # the current call stack
-            sublime.set_timeout(self.create_destination, 100)
+            def fn():
+                self.create_destination()
+                if on_create_complete:
+                    on_create_complete()
+            sublime.set_timeout(fn, 100)
 
     def pipe_text(self, view):
         """
