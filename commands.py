@@ -129,14 +129,11 @@ class BuildListener(sublime_plugin.EventListener):
             pipe = Pipe()
             proxy_settings(pipe, view.settings())
 
-            def on_create_complete():
-                self.pipes[source_view.id()] = pipe
-        else:
-            on_create_complete = None
+            self.pipes[source_view.id()] = pipe
 
         pipe.first_update = True
         pipe.view_launched_build = view
-        pipe.prepare_copy(window, on_create_complete)
+        pipe.prepare_copy(window)
 
         def hide_panel():
             window.run_command("hide_panel")
