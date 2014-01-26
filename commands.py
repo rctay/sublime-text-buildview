@@ -22,29 +22,56 @@ def proxy_settings(pipe, view):
     set_settings_listener(pipe, "enabled_setting", settings, "bv_enabled")
 
 
-class Pipe(PipeViews):
-    dest_view_name = "Build output"
-
-    last_placed_group = (0, 0)
-    group_to_avoid = None
-
-    def group_other_than(self, window, group):
-        groups = window.num_groups()
-        for i in range(groups):
-            if i != group:
-                group = i
-        return group, 0
+class PlacementPolicy1(object):
+    """
+    Use the (group, index) where the build view was last (closed) in; 
+    if we haven't had a build view yet, 
+      if the windows has more than one group,
+        use the first group that doesn't hold the source view;
+        otherwise, place the build view next to the source view (on the right)
+    """
+    last_placed_group = None
 
     def choose_group(self, window, view):
-        group = self.last_placed_group
-        if self.group_to_avoid == group[0]:
-            group = self.group_other_than(window, self.group_to_avoid)
-        return group
+        """
+        Returns a tuple (group, index), corresponding to
+        sublime.View.get_view_index()/set_view_index()
+        """
+
+        source_group_index, source_view_index = window.get_view_index(view)
+
+        if self.last_placed_group is not None:
+            group_index, view_index = self.last_placed_group
+        else:
+            num_groups = window.num_groups()
+            if num_groups == 1:
+                place_to_side = True
+            else:
+                group_index = next((i for i in range(num_groups) if i != source_group_index), None)
+                if group_index is None:
+                    place_to_side = True
+                else:
+                    view_index = 0
+                    place_to_side = False
+
+            if place_to_side:
+                group_index = source_group_index
+                view_index = source_view_index + 1
+
+        # sublime refuses to place view into group_index if view_index exceeds
+        # number of views in that group
+        view_index = min(view_index, len(window.views_in_group(group_index)))
+
+        return group_index, view_index
+
+
+class Pipe(PlacementPolicy1, PipeViews):
+    dest_view_name = "Build output"
 
     def on_view_created(self, window, view, pipe):
         proxy_settings(pipe, view)
 
-        window.set_view_index(view, *self.choose_group(window, view))
+        window.set_view_index(view, *self.choose_group(window, self.view_launched_build))
 
         window.focus_view(self.view_launched_build)
 
@@ -103,7 +130,6 @@ class BuildListener(sublime_plugin.EventListener):
         pipe.prepare_copy(window)
         pipe.first_update = True
         pipe.view_launched_build = view
-        pipe.group_to_avoid = window.get_view_index(view)[0]
 
         def hide_panel():
             window.run_command("hide_panel")
