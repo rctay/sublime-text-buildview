@@ -113,6 +113,13 @@ class ContentClear(sublime_plugin.TextCommand):
 
 class ContentReplace(sublime_plugin.TextCommand):
     def run(self, edit, start, end, text):
+        # On Sublime Text 2 32-bit (on 64-bit??),
+        # - run_command() converts start/end to floats; and
+        # - sublime.Region() does not accept floats
+        # Together these causes Region() to fail; hence the cast.
+        #
+        # int() instead of long() since Python 3 does not have the latter
+        start = int(start); end = int(end)
         region = sublime.Region(start, end)
         self.view.replace(edit, region, text)
 
