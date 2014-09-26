@@ -38,6 +38,8 @@ class PipeViews(object):
 
         self.on_view_created(self.window, dest_view, self)
 
+        dest_view.set_scratch(True)
+
         return dest_view
 
     def prepare_copy(self, window):
