@@ -33,12 +33,11 @@ class PipeViews(object):
         self.scroll_setting = key
 
         dest_view.set_name(self.dest_view_name)
+        dest_view.set_scratch(True)
 
         self.dest_view = dest_view
 
         self.on_view_created(self.window, dest_view, self)
-
-        dest_view.set_scratch(True)
 
         return dest_view
 
