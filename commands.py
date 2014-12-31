@@ -22,8 +22,8 @@ def proxy_settings(pipe, settings):
 
 class PlacementPolicy1(object):
     """
-    Use the (group, index) where the build view was last (closed) in; 
-    if we haven't had a build view yet, 
+    Use the (group, index) where the build view was last (closed) in;
+    if we haven't had a build view yet,
       if the windows has more than one group,
         use the first group that doesn't hold the source view;
         otherwise, place the build view next to the source view (on the right)
