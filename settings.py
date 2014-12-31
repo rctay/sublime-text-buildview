@@ -26,9 +26,22 @@ class SettingsDeclaration(object):
                 else sublime.load_settings(self.settings_file).get(self.settings_key, self.default)
 
 
+class SilenceModifiedWarningSetting(SettingsDeclaration):
+    """
+    This setting determines if a "Save changes?" dialog is to be launched.
+
+    The default is to not show a "Save changes?" dialog.
+    """
+
+    settings_key = "buildview_silence_modified_warning"
+
+    default = True
+
+
 # a hack to allow us to set attributes with less keystrokes - via http://stackoverflow.com/a/2283725
 class _Struct(object):
     pass
 
 
 available = _Struct()
+available.SilenceModifiedWarning = SilenceModifiedWarningSetting()

@@ -14,5 +14,9 @@
 	{
 		"caption": "Disable/Enable buildview for this window",
 		"command": "toggle_enabled"
+	},
+	{
+		"caption": "Show/Hide \"Save changes?\" when closing build output view",
+		"command": "toggle_silence_modified_warning"
 	}
 ]
