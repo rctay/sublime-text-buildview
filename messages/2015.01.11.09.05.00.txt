@@ -1,0 +1,9 @@
+Improvements:
+ - closing the build output view, directly, or indirectly, eg. by exiting
+   Sublime Text, no longer causes a "Save changes?" warning to be displayed.
+
+   If you wish to have the old behaviour (of having a warning displayed), set
+   `buildview_silence_modified_warning` in your settings; see `README.md` for
+   details.
+
+   Thanks to pull #8 by @wrsaunde
