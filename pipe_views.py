@@ -1,5 +1,10 @@
 import sublime, sublime_plugin
 
+if sublime.version().startswith('3'):
+    from . import settings
+else:
+    import settings
+
 
 class PipeViews(object):
     dest_view_name = "Dest"
@@ -28,11 +33,12 @@ class PipeViews(object):
     def create_destination(self):
         dest_view = self.window.new_file()
 
-        settings = sublime.load_settings("Preferences.sublime-settings")
-        key = settings.get("buildview_scroll", None)
+        settings_obj = sublime.load_settings("Preferences.sublime-settings")
+        key = settings_obj.get("buildview_scroll", None)
         self.scroll_setting = key
 
         dest_view.set_name(self.dest_view_name)
+        dest_view.set_scratch(settings.available.SilenceModifiedWarning.get_value())
 
         self.dest_view = dest_view
 

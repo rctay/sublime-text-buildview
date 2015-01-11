@@ -52,6 +52,22 @@ For example:
     	...
     }
 
+## "Save changes?" warning
+
+Since version 90e2365182e9566b2fa79dd7dc79d6b0d7e433f6 (Package Control: 2014.01.27.15.16.48),
+closing the build output view, directly, or indirectly, eg. by exiting
+Sublime Text, no longer causes a "Save changes?" warning to be displayed.
+
+If you wish to have the old behaviour (of having a warning displayed), set
+`buildview_silence_modified_warning` in your user/default `Preferences.sublime-settings`
+to `false` (literal, not a string wrapped in quotes); for example:
+
+    {
+    	...
+    	"buildview_silence_modified_warning": false,
+    	...
+    }
+
 ## Disabling
 
 The plugin can be disabled on a per-view basis by triggering the Command
