@@ -39,6 +39,7 @@ class PipeViews(object):
 
         dest_view.set_name(self.dest_view_name)
         dest_view.set_scratch(settings.available.SilenceModifiedWarning.get_value())
+        dest_view.set_syntax_file('Packages/sublime-text-2-buildview/Build Output.tmLanguage')
 
         self.dest_view = dest_view
 
