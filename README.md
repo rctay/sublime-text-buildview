@@ -52,6 +52,17 @@ For example:
     	...
     }
 
+## Suppress build results panel
+
+The built-in build results view will display momentarily. To disable this, use
+the User preference setting:
+
+    {
+    	...
+    	"show_panel_on_build": false,
+    	...
+    }
+
 ## "Save changes?" warning
 
 Since version 90e2365182e9566b2fa79dd7dc79d6b0d7e433f6 (Package Control: 2014.01.27.15.16.48),
