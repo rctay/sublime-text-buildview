@@ -52,6 +52,16 @@ For example:
     	...
     }
 
+## Suppress build results panel
+
+The built-in build results view will display momentarily. To disable this, use the User preference setting:
+
+    {
+      ...
+      "show_panel_on_build": false`.
+      ...
+    }
+
 ## "Save changes?" warning
 
 Since version 90e2365182e9566b2fa79dd7dc79d6b0d7e433f6 (Package Control: 2014.01.27.15.16.48),
@@ -77,7 +87,7 @@ Palette in either the view with build output or with source code and selecting
 
 # Known Issues/TODO
 
- - sublime's built-in build view shows up momentarily before disappearing: wontfix, see #9
+ - The built-in build view in Sublime Text 2 shows up momentarily before disappearing: wontfix, see #9
  - pin/unpin location, so that subsequent builds scrolls to the same location
  - build view is "forgotten" after restarting Sublime
  - improve disabling/enabling options (eg whitelists, blacklists)
@@ -86,7 +96,7 @@ Pull requests welcome!
 
 # Hacking notes
 
- - after editing `pipe_views.py`, restart Sublime or re-save `commands.py` 
+ - after editing `pipe_views.py`, restart Sublime or re-save `commands.py`
    for the changes to take effect.
  - _who's view is it anyway?_ A variety of names are used for views in the
    source code, according to their different roles:
@@ -99,5 +109,5 @@ Pull requests welcome!
 
 # Donate
 
-If you liked this plugin, you can donate here:  
+If you liked this plugin, you can donate here:
 [![Flattr this!](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=rctay&url=https://github.com/rctay/sublime-text-2-buildview&title=sublime-text-2-buildview&category=software) [![Gittip me!](https://www.gratipay.com/assets/-/logo.png)](https://www.gratipay.com/rctay/)
