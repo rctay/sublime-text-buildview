@@ -122,7 +122,6 @@ the User preference setting:
 
 # Known Issues/TODO
 
- - (ST2 only) sublime's built-in build view shows up momentarily before disappearing: wontfix, see #9
  - pin/unpin location, so that subsequent builds scrolls to the same location
  - build view is "forgotten" after restarting Sublime
  - improve disabling/enabling options (eg whitelists, blacklists)
