@@ -133,9 +133,22 @@ class BuildListener(sublime_plugin.EventListener):
         pipe.view_launched_build = view
         pipe.prepare_copy(window)
 
+        # We cannot call the `hide_panel` directly; it has no effect if we do
+        # so, last I checked in Sublime 2221 and 3103. Not surprising,
+        # considering how most event-loops work. So we employ the (usual) out-
+        # of-band trick.
+        #
+        # It is interesting to note that while `show_panel` accepts the panel
+        # argument, `hide_panel` doesn't. See [1]. Though, [2] gives a hint
+        # that it might work if the panel is specified via contexts instead of
+        # as an argument. But the API (`run_command`) doesn't allow contexts to
+        # be specified, only key bindings in a .sublime-keymap. Hmph.
+        #
+        # [1] https://sublimetext.userecho.com/topics/1930-add-panel-param-to-hide_panel-command/
+        # [2] https://forum.sublimetext.com/t/output-panel-hotkey/15628/2
         def hide_panel():
             window.run_command("hide_panel")
-        sublime.set_timeout(hide_panel, 500)
+        sublime.set_timeout(hide_panel, 1)
 
         return None
 
