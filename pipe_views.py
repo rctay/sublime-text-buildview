@@ -1,9 +1,9 @@
 import sublime, sublime_plugin
 
 if sublime.version().startswith('3'):
-    from . import settings
+    from . import settings as settings_bv
 else:
-    import settings
+    import settings as settings_bv
 
 
 class PipeViews(object):
@@ -38,7 +38,7 @@ class PipeViews(object):
         self.scroll_setting = key
 
         dest_view.set_name(self.dest_view_name)
-        dest_view.set_scratch(settings.available.SilenceModifiedWarning.get_value())
+        dest_view.set_scratch(settings_bv.available.SilenceModifiedWarning.get_value())
 
         self.dest_view = dest_view
 

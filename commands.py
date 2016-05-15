@@ -2,10 +2,10 @@ import sublime, sublime_plugin
 
 if sublime.version().startswith('3'):
     from .pipe_views import PipeViews
-    from . import settings
+    from . import settings as settings_bv
 else:
     from pipe_views import PipeViews
-    import settings
+    import settings as settings_bv
 
 def set_settings_listener(receiver, r_key, settings, s_key):
     settings.clear_on_change(s_key)
@@ -179,4 +179,4 @@ class ToggleEnabled(sublime_plugin.TextCommand):
 
 class ToggleSilenceModifiedWarning(sublime_plugin.TextCommand):
     def run(self, edit):
-        settings.available.SilenceModifiedWarning.set_opposite()
+        settings_bv.available.SilenceModifiedWarning.set_opposite()
