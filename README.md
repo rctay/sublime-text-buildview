@@ -1,6 +1,6 @@
 # A Sublime Text 2/3 plugin to show build output in a view.
 
-[![Flattr this!](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=rctay&url=https://github.com/rctay/sublime-text-2-buildview&title=sublime-text-2-buildview&category=software) [![Gittip me!](https://www.gratipay.com/assets/-/logo.png)](https://www.gratipay.com/rctay/)
+[![Gratipay me!](https://img.shields.io/badge/Donate-gratipay-663300.svg)](https://gratipay.com/~rctay) [![Donate with Bitcoin](https://img.shields.io/badge/Donate-BTC-orange.svg)](https://blockchain.info/address/19xm5wFxyrue9Ncdhw3qLysmYAh7NSxbAc) [![Donate with Ethereum](https://img.shields.io/badge/Donate-ETH-blue.svg)](https://etherscan.io/address/0x1e4625a37f0bC6f37F6785e74Acdcb9C9473A3Ba)
 
 In Sublime Text, build results are shown in a fixed horizontal panel; you
 can't drag it to put it vertically next to your code, like in Eclipse, VS.
@@ -100,4 +100,5 @@ Pull requests welcome!
 # Donate
 
 If you liked this plugin, you can donate here:  
-[![Flattr this!](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=rctay&url=https://github.com/rctay/sublime-text-2-buildview&title=sublime-text-2-buildview&category=software) [![Gittip me!](https://www.gratipay.com/assets/-/logo.png)](https://www.gratipay.com/rctay/)
+[![Gratipay me!](https://img.shields.io/badge/Donate-gratipay-663300.svg)](https://gratipay.com/~rctay) [![Donate with Bitcoin](https://img.shields.io/badge/Donate-BTC-orange.svg)](https://blockchain.info/address/19xm5wFxyrue9Ncdhw3qLysmYAh7NSxbAc) [![Donate with Ethereum](https://img.shields.io/badge/Donate-ETH-blue.svg)](https://etherscan.io/address/0x1e4625a37f0bC6f37F6785e74Acdcb9C9473A3Ba)
+
