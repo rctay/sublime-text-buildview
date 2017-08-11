@@ -5,6 +5,20 @@ if sublime.version().startswith('3'):
 else:
     import settings as settings_bv
 
+def set_settings_listener(receiver, r_key, settings, s_key):
+    settings.clear_on_change(s_key)
+    def callback(*args):
+        val = settings.get(s_key)
+        setattr(receiver, r_key, val)
+    settings.add_on_change(s_key, callback)
+
+def proxy_settings(pipe, settings):
+    # scrolling
+    set_settings_listener(pipe, "scroll_setting", settings, "bv_scroll")
+
+    # enabled
+    set_settings_listener(pipe, "enabled_setting", settings, "bv_enabled")
+
 
 class PipeViews(object):
     dest_view_name = "Dest"
@@ -41,7 +55,7 @@ class PipeViews(object):
         dest_view.set_scratch(settings_bv.available.SilenceModifiedWarning.get_value())
 
         self.dest_view = dest_view
-
+        proxy_settings(self, dest_view.settings())
         self.on_view_created(self.window, dest_view, self)
 
         return dest_view
