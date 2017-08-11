@@ -29,7 +29,7 @@ class SettingsDeclaration(object):
     def kls_get_value(kls, settings=None):
         if not settings:
             settings = sublime.active_window().active_view().settings()
-        value = settings.get("%s.%s" % (kls.namespace, kls.key), kls.default))
+        value = settings.get("%s.%s" % (kls.namespace, kls.key))
         return value
 
     @classmethod
@@ -63,6 +63,7 @@ class ScrollSetting(EnumSettingsDeclaration):
     key = "scroll"
 
     enum = ["bottom", "top", "last"]
+    # Just to be sure even though we provided our default in Preferences.sublime-settings
     default = "bottom"
 
 
@@ -82,8 +83,6 @@ class BoolSettingsDeclaration(SettingsDeclaration):
 class EnabledSetting(BoolSettingsDeclaration):
     key = "enabled"
 
-    default = True
-
 
 class SilenceModifiedWarningSetting(BoolSettingsDeclaration):
     """
@@ -93,6 +92,4 @@ class SilenceModifiedWarningSetting(BoolSettingsDeclaration):
     """
 
     key = "silence_modified_warning"
-
-    default = True
 
