@@ -111,6 +111,17 @@ If you wish to have the old behaviour (of having a warning displayed), set to
 `false`.
 
 
+## Suppress build results panel
+
+The built-in build results view will display momentarily. To disable this, use
+the User preference setting:
+
+    {
+    	...
+    	"show_panel_on_build": false,
+    	...
+    }
+
 # Known Issues/TODO
 
  - sublime's built-in build view shows up momentarily before disappearing: wontfix, see #9
