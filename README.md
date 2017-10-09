@@ -125,7 +125,37 @@ the User preference setting:
  - pin/unpin location, so that subsequent builds scrolls to the same location
  - build view is "forgotten" after restarting Sublime
  - improve disabling/enabling options (eg whitelists, blacklists)
- - improve namespacing of settings into a dictionary, once sublime supports merging of settings dictionaries through the hierarchy
+ - improve namespacing of settings into a dictionary, once sublime supports
+   merging of settings dictionaries through the hierarchy. For example, if
+   buildview hypothetically read settings from a dictionary, and you had in your
+   `Preferences.sublime-settings`
+
+    {
+    	...
+    	"buildview": {
+    		"enabled": false,
+    		"scroll": "top"
+    	}
+    	...
+    }
+
+   and you then did this in the project's `.sublime-project` file
+
+    {
+    	...
+    	"folders": [...]
+    	"settings": {
+    		"buildview": {
+    			"enabled": true
+    		}
+    	}
+    	...
+    }
+
+    buildview would behave as though the `"scroll"` setting was not defined
+    because sublime does not automatically merge settings dictionaries through
+    the settings hierarchy, so the `"scroll"` setting does not bubble up.
+
 
 Pull requests welcome!
 
