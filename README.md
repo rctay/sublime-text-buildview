@@ -70,6 +70,7 @@ Then in the project's `.sublime-project` file:
 (`"scroll"` added for demonstration; for details on `"scroll"`, refer below.)
 
 
+
 ## Output scrolling
 
 **Command Palette**:
@@ -107,9 +108,21 @@ If you wish to have the old behaviour (of having a warning displayed), set to
 `false`.
 
 
+## Suppress build results panel
+
+The built-in build results view will display momentarily. To disable this, use
+the User preference setting:
+
+    {
+    	...
+    	"show_panel_on_build": false,
+    	...
+    }
+
+
 # Known Issues/TODO
 
- - sublime's built-in build view shows up momentarily before disappearing: wontfix, see #9
+ - (ST2 only) sublime's built-in build view shows up momentarily before disappearing: wontfix, see #9
  - pin/unpin location, so that subsequent builds scrolls to the same location
  - build view is "forgotten" after restarting Sublime
  - improve disabling/enabling options (eg whitelists, blacklists)
