@@ -1,25 +1,11 @@
 import sublime, sublime_plugin
 
 if sublime.version().startswith('3'):
-    from .pipe_views import PipeViews
-    from . import settings
+    from .pipe_views import PipeViews, proxy_settings
+    from . import settings as settings_bv
 else:
-    from pipe_views import PipeViews
-    import settings
-
-def set_settings_listener(receiver, r_key, settings, s_key):
-    settings.clear_on_change(s_key)
-    def callback(*args):
-        val = settings.get(s_key)
-        setattr(receiver, r_key, val)
-    settings.add_on_change(s_key, callback)
-
-def proxy_settings(pipe, settings):
-    # scrolling
-    set_settings_listener(pipe, "scroll_setting", settings, "bv_scroll")
-
-    # enabled
-    set_settings_listener(pipe, "enabled_setting", settings, "bv_enabled")
+    from pipe_views import PipeViews, proxy_settings
+    import settings as settings_bv
 
 
 class PlacementPolicy1(object):
@@ -74,8 +60,6 @@ class Pipe(PlacementPolicy1, PipeViews):
     dest_view_name = "Build output"
 
     def on_view_created(self, window, view, pipe):
-        proxy_settings(pipe, view.settings())
-
         group_index, view_index = self.choose_group(window, self.view_launched_build)
         window.set_view_index(view, group_index, view_index)
 
@@ -90,7 +74,7 @@ class BuildListener(sublime_plugin.EventListener):
 
     def on_modified(self, view):
         pipe = self.pipes.get(view.id(), None)
-        if pipe is None or not pipe.enabled_setting:
+        if pipe is None or not pipe.enabled_setting.get_value():
             return
 
         pipe.pipe_text(view)
@@ -100,7 +84,7 @@ class BuildListener(sublime_plugin.EventListener):
         if pipe.prepare_create:
             return
 
-        scroll_pos = pipe.scroll_setting
+        scroll_pos = pipe.scroll_setting.get_value()
         if scroll_pos == "top" and pipe.first_update:
             pipe.first_update = False
             pipe.dest_view.show(0)
@@ -132,7 +116,7 @@ class BuildListener(sublime_plugin.EventListener):
     # to re-implement the copy and cut commands. (Important, since
     # run_command("copy") doesn't do anything.)
     def on_query_context(self, view, key, *args):
-        if key != "build_fake" or not view.settings().get("bv_enabled", True):
+        if key != "build_fake" or not settings_bv.EnabledSetting.kls_get_value(view.settings()):
             return None
 
         window = view.window()
@@ -158,25 +142,24 @@ class BuildListener(sublime_plugin.EventListener):
 
 class ToggleScrollBottom(sublime_plugin.TextCommand):
     def run(self, edit):
-        self.view.settings().set("bv_scroll", "bottom")
+        settings_bv.ScrollSetting.kls_set_value(self.view.settings(), "bottom")
 
 
 class ToggleScrollTop(sublime_plugin.TextCommand):
     def run(self, edit):
-        self.view.settings().set("bv_scroll", "top")
+        settings_bv.ScrollSetting.kls_set_value(self.view.settings(), "top")
 
 
 class ToggleScrollUnchanged(sublime_plugin.TextCommand):
     def run(self, edit):
-        self.view.settings().set("bv_scroll", "last")
+        settings_bv.ScrollSetting.kls_set_value(self.view.settings(), "last")
 
 
 class ToggleEnabled(sublime_plugin.TextCommand):
     def run(self, edit):
-        s = self.view.settings()
-        s.set("bv_enabled", not s.get("bv_enabled", True))
+        settings_bv.EnabledSetting.kls_set_opposite(self.view.settings())
 
 
 class ToggleSilenceModifiedWarning(sublime_plugin.TextCommand):
     def run(self, edit):
-        settings.available.SilenceModifiedWarning.set_opposite()
+        settings_bv.SilenceModifiedWarningSetting.kls_set_opposite(self.view.settings())
