@@ -1,21 +1,25 @@
 import sublime, sublime_plugin
 
 if sublime.version().startswith('3'):
-    from . import settings
+    from . import settings as settings_bv
 else:
-    import settings
+    import settings as settings_bv
+
+def set_settings_listener(instance, settings):
+    def callback(*args):
+        val = instance.kls_get_value(settings)
+        instance.set_value(val)
+    settings.add_on_change(instance.namespace, callback)
+
+def proxy_settings(pipe, settings):
+    settings.clear_on_change(settings_bv.SettingsDeclaration.namespace)
+
+    set_settings_listener(pipe.scroll_setting, settings)
+    set_settings_listener(pipe.enabled_setting, settings)
 
 
 class PipeViews(object):
     dest_view_name = "Dest"
-
-    def __setattr__(self, name, value):
-        if name is "enabled_setting":
-            value = value is None or value
-        elif name is "scroll_setting":
-            value = value if value in set(["bottom", "top", "last"]) else "bottom"
-
-        object.__setattr__(self, name, value)
 
     def __init__(self):
         self.source_last_pos = 0
@@ -24,24 +28,19 @@ class PipeViews(object):
         self.buffer = ''
         self.last_scroll_region = None
 
-        # just use None, our internal cleanup ensures sane values anyway
-        self.enabled_setting = None
-        self.scroll_setting = None
+        self.enabled_setting = settings_bv.EnabledSetting()
+        self.scroll_setting = settings_bv.ScrollSetting()
 
         self.dest_view = None
 
     def create_destination(self):
         dest_view = self.window.new_file()
 
-        settings_obj = sublime.load_settings("Preferences.sublime-settings")
-        key = settings_obj.get("buildview_scroll", None)
-        self.scroll_setting = key
-
         dest_view.set_name(self.dest_view_name)
-        dest_view.set_scratch(settings.available.SilenceModifiedWarning.get_value())
+        dest_view.set_scratch(settings_bv.SilenceModifiedWarningSetting.kls_get_value(dest_view.settings()))
 
         self.dest_view = dest_view
-
+        proxy_settings(self, dest_view.settings())
         self.on_view_created(self.window, dest_view, self)
 
         return dest_view

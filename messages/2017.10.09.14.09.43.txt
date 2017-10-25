@@ -1,0 +1,13 @@
+Release notes (Mon Oct 9 2017):
+- Rework settings to be reads from your `.sublime-settings` file(s), and hence
+  respects sublime's settings hierarchy, so you can, for example, enable the
+  plugin only for selected projects;
+- Reduce significantly time before hiding built-in build results panel; if you
+  prefer hiding it completely, you can use "show_panel_on_build" (works in ST3
+  but not ST2). Suggested by @Birnbaum2001, documented in README by
+  @insilica (@zakpatterson) in pull #15.
+
+If you liked this plugin, you can donate here:
+Gratipay: https://gratipay.com/~rctay
+BTC: 19xm5wFxyrue9Ncdhw3qLysmYAh7NSxbAc
+ETH: 0x1e4625a37f0bC6f37F6785e74Acdcb9C9473A3Ba

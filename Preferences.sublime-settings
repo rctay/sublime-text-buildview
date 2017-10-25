@@ -1,18 +1,5 @@
 {
-    // The default is to scroll to the bottom. You can change this by specifying `buildview_scroll`
-    // in Sublime Text's Settings (ie. user/default `Preferences.sublime-settings`). It should be
-    // one of these strings:
-    // - `top`
-    // - `bottom`
-    // - `last`
-    "buildview_scroll": "last",
-
-    // Since version 90e2365182e9566b2fa79dd7dc79d6b0d7e433f6 (Package Control:
-    // 2014.01.27.15.16.48), closing the build output view, directly, or indirectly, eg. by exiting
-    // Sublime Text, no longer causes a "Save changes?" warning to be displayed.
-    //
-    // If you wish to have the old behaviour (of having a warning displayed), set
-    // `buildview_silence_modified_warning` in your user/default `Preferences.sublime-settings` to
-    // `false` (literal, not a string wrapped in quotes).
-    "buildview_silence_modified_warning": true,
+	"buildview.enabled": true,
+	"buildview.scroll": "bottom",
+	"buildview.silence_modified_warning": true
 }
