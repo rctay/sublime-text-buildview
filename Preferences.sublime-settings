@@ -5,7 +5,7 @@
     // - `top`
     // - `bottom`
     // - `last`
-    "buildview.scroll": "last",
+    "buildview.scroll": "bottom",
 
     // Since version 90e2365182e9566b2fa79dd7dc79d6b0d7e433f6 (Package Control:
     // 2014.01.27.15.16.48), closing the build output view, directly, or indirectly, eg. by exiting
