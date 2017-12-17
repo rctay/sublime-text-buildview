@@ -1,0 +1,11 @@
+[
+	{ "keys": ["f7"], "command": "build",
+		"context": [{"key": "build_fake", "operator":"equal", "operand":true}]
+	},
+	{ "keys": ["ctrl+b"], "command": "build",
+		"context": [{"key": "build_fake", "operator":"equal", "operand":true}]
+	},
+	{ "keys": ["ctrl+shift+b"], "command": "build",
+		"context": [{"key": "build_fake", "operator":"equal", "operand":true}]
+	}
+]
