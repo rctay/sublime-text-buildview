@@ -34,7 +34,7 @@ class SettingsDeclaration(object):
 
     @classmethod
     def kls_set_value(kls, settings, value):
-        settings.set("%s.%s" % (kls.namespace, kls.key), d)
+        settings.set("%s.%s" % (kls.namespace, kls.key), value)
 
 
 class EnumSettingsDeclaration(SettingsDeclaration):
