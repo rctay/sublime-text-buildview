@@ -146,10 +146,11 @@ class BuildListener(sublime_plugin.EventListener):
         #
         # [1] https://sublimetext.userecho.com/topics/1930-add-panel-param-to-hide_panel-command/
         # [2] https://forum.sublimetext.com/t/output-panel-hotkey/15628/2
-        def hide_panel():
+        def hide_panel(count):
             window.run_command("hide_panel")
-        sublime.set_timeout(hide_panel, 1)
+            if count > 0: sublime.set_timeout(lambda: hide_panel(count-1), 100)
 
+        sublime.set_timeout(lambda: hide_panel(10), 100)
         return None
 
 
