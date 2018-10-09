@@ -59,6 +59,9 @@ class PlacementPolicy1(object):
 class Pipe(PlacementPolicy1, PipeViews):
     dest_view_name = "Build output"
 
+    def __init__(self, source_view):
+        super(Pipe, self).__init__(source_view)
+
     def on_view_created(self, window, view, pipe):
         group_index, view_index = self.choose_group(window, self.view_launched_build)
         window.set_view_index(view, group_index, view_index)
@@ -124,7 +127,7 @@ class BuildListener(sublime_plugin.EventListener):
         source_view = window.get_output_panel("exec")
         pipe = self.pipes.get(source_view.id())
         if not pipe:
-            pipe = Pipe()
+            pipe = Pipe(source_view)
             proxy_settings(pipe, view.settings())
 
             self.pipes[source_view.id()] = pipe
