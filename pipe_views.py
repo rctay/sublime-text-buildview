@@ -17,12 +17,19 @@ def proxy_settings(pipe, settings):
     set_settings_listener(pipe.scroll_setting, settings)
     set_settings_listener(pipe.enabled_setting, settings)
 
-def copy_view_settings(source_view, dest_view):
+def copy_view_settings(source_view, destine_view):
     source_settings = source_view.settings()
-    source_syntax = source_settings.get('syntax')
+    destine_settings = destine_view.settings()
 
     # print('BuildView setting syntax', source_syntax)
-    if source_syntax: dest_view.set_syntax_file(source_syntax)
+    source_syntax = source_settings.get('syntax')
+    if source_syntax: destine_view.set_syntax_file(source_syntax)
+
+    settings_names = ['result_file_regex', 'result_line_regex', 'result_base_dir']
+
+    for setting_name in settings_names:
+        setting_value = source_settings.get(setting_name)
+        destine_settings.set(setting_name, setting_value)
 
 
 class PipeViews(object):
