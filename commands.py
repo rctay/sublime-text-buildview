@@ -91,11 +91,14 @@ class BuildListener(sublime_plugin.EventListener):
         if scroll_pos == "top" and pipe.first_update:
             pipe.first_update = False
             pipe.dest_view.show(0)
-        elif scroll_pos == "bottom":
+        elif scroll_pos == "bottom" or pipe.last_scroll_region is None:
             pipe.dest_view.show(pipe.dest_view.size())
         elif scroll_pos == "last" and pipe.last_scroll_region is not None:
             def fn():
                 pipe.dest_view.set_viewport_position(pipe.last_scroll_region)
+                pipe.dest_view.sel().clear()
+                for selection in pipe.last_caret_region:
+                    pipe.dest_view.sel().add(sublime.Region(selection[0], selection[1]))
             sublime.set_timeout(fn, 500)
 
     def on_close(self, view):

@@ -67,6 +67,7 @@ class PipeViews(object):
         if dest_view is not None:
             copy_view_settings(self.source_view, dest_view)
             self.last_scroll_region = dest_view.viewport_position()
+            self.last_caret_region = [(selection.begin(), selection.end()) for selection in dest_view.sel()]
 
             dest_view.run_command('content_clear')
         else:
