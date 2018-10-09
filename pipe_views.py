@@ -17,11 +17,18 @@ def proxy_settings(pipe, settings):
     set_settings_listener(pipe.scroll_setting, settings)
     set_settings_listener(pipe.enabled_setting, settings)
 
+def copy_view_settings(source_view, dest_view):
+    source_settings = source_view.settings()
+    source_syntax = source_settings.get('syntax')
+
+    # print('BuildView setting syntax', source_syntax)
+    if source_syntax: dest_view.set_syntax_file(source_syntax)
+
 
 class PipeViews(object):
     dest_view_name = "Dest"
 
-    def __init__(self):
+    def __init__(self, source_view):
         self.source_last_pos = 0
         self.is_running = False
         self.prepare_create = False
@@ -32,14 +39,16 @@ class PipeViews(object):
         self.scroll_setting = settings_bv.ScrollSetting()
 
         self.dest_view = None
+        self.source_view = source_view
 
     def create_destination(self):
         dest_view = self.window.new_file()
+        self.dest_view = dest_view
 
+        copy_view_settings(self.source_view, dest_view)
         dest_view.set_name(self.dest_view_name)
         dest_view.set_scratch(settings_bv.SilenceModifiedWarningSetting.kls_get_value(dest_view.settings()))
 
-        self.dest_view = dest_view
         proxy_settings(self, dest_view.settings())
         self.on_view_created(self.window, dest_view, self)
 
@@ -53,7 +62,10 @@ class PipeViews(object):
         self.source_last_pos = 0
 
         dest_view = self.dest_view
+        # print('dest_view', dest_view)
+
         if dest_view is not None:
+            copy_view_settings(self.source_view, dest_view)
             self.last_scroll_region = dest_view.viewport_position()
 
             dest_view.run_command('content_clear')
