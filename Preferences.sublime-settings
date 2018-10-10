@@ -1,6 +1,6 @@
 {
 	// Whether this plugin is enabled
-	"buildview.enabled": true,
+	"buildview.enabled": false,
 
 	// The default is to scroll to the bottom. You can change this by specifying `buildview_scroll`
 	// in Sublime Text's Settings (ie. user/default `Preferences.sublime-settings`). It should be
