@@ -156,7 +156,7 @@ class BuildListener(sublime_plugin.EventListener):
             window.run_command("hide_panel")
             if count > 0: sublime.set_timeout(lambda: hide_panel(count-1), 100)
 
-        sublime.set_timeout(lambda: hide_panel(10), 100)
+        sublime.set_timeout(lambda: hide_panel(20), 100)
         return None
 
 
