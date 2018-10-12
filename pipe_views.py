@@ -48,11 +48,27 @@ class PipeViews(object):
         self.dest_view = None
         self.source_view = source_view
 
+    def close_old_build_view(self):
+        views = self.window.views()
+
+        if len(views) > 1:
+
+            for view in self.window.views():
+                view_name = view.name()
+                # print('view_name: `%s`, dest_view_name: `%s`', (view_name, self.dest_view_name))
+
+                if view.is_scratch() and view_name == self.dest_view_name:
+                    self.window.focus_view(view)
+                    self.save_view_positions(view)
+                    self.window.run_command("close_file")
+
     def create_destination(self):
         dest_view = self.window.new_file()
         self.dest_view = dest_view
 
+        self.close_old_build_view()
         copy_view_settings(self.source_view, dest_view)
+
         dest_view.set_name(self.dest_view_name)
         dest_view.set_scratch(settings_bv.SilenceModifiedWarningSetting.kls_get_value(dest_view.settings()))
 
@@ -60,6 +76,10 @@ class PipeViews(object):
         self.on_view_created(self.window, dest_view, self)
 
         return dest_view
+
+    def save_view_positions(self, dest_view):
+        self.last_scroll_region = dest_view.viewport_position()
+        self.last_caret_region = [(selection.begin(), selection.end()) for selection in dest_view.sel()]
 
     def prepare_copy(self, window):
         """
@@ -73,9 +93,8 @@ class PipeViews(object):
 
         if dest_view is not None:
             copy_view_settings(self.source_view, dest_view)
-            self.last_scroll_region = dest_view.viewport_position()
-            self.last_caret_region = [(selection.begin(), selection.end()) for selection in dest_view.sel()]
 
+            self.save_view_positions(dest_view)
             dest_view.run_command('content_clear')
         else:
             self.buffer = ''
