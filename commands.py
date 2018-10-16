@@ -111,23 +111,22 @@ class BuildListener(sublime_plugin.EventListener):
                 # because (-1, -1) is treated as a null element.
                 pipe.last_placed_group = sublime.active_window().get_view_index(view)
 
-    # The technique used below of hooking on to an existing (possibly built-
-    # in) command was based on kemayo's excellent work [1]. The comment
-    # describing the technique is reproduced here.
-    #
-    # [1] https://github.com/kemayo/sublime-text-2-clipboard-history/blob/ed5cac2a50189f2399e928b4142b19506af5cc6f#clipboard.py
-    #
-    # Here we see a cunning plan. We listen for a key, but never say we
-    # support it. This lets us respond to ctrl-c and ctrl-x, without having
-    # to re-implement the copy and cut commands. (Important, since
-    # run_command("copy") doesn't do anything.)
-    def on_query_context(self, view, key, *args):
-        view_settings = view.settings()
-        if key != "build_fake" or not settings_bv.EnabledSetting.kls_get_value(view_settings):
+    # https://github.com/kemayo/sublime-text-2-clipboard-history/blob/6b07f38a8ab3d38921bccff68a15658f01c10207/clipboard.py#L75
+    def on_window_command(self, window, command_name, args):
+
+        if command_name != 'build':
             return None
 
-        window = view.window()
+        view = window.active_view()
+        view_settings = view.settings()
 
+        if not settings_bv.EnabledSetting.kls_get_value(view_settings):
+            return None
+
+        if args and 'select' in args and args['select']:
+            return None
+
+        print("Here 3")
         source_view = window.get_output_panel("exec")
         pipe = self.pipes.get(source_view.id())
         if not pipe:
