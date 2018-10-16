@@ -122,7 +122,8 @@ class BuildListener(sublime_plugin.EventListener):
     # to re-implement the copy and cut commands. (Important, since
     # run_command("copy") doesn't do anything.)
     def on_query_context(self, view, key, *args):
-        if key != "build_fake" or not settings_bv.EnabledSetting.kls_get_value(view.settings()):
+        view_settings = view.settings()
+        if key != "build_fake" or not settings_bv.EnabledSetting.kls_get_value(view_settings):
             return None
 
         window = view.window()
@@ -152,12 +153,11 @@ class BuildListener(sublime_plugin.EventListener):
         #
         # [1] https://sublimetext.userecho.com/topics/1930-add-panel-param-to-hide_panel-command/
         # [2] https://forum.sublimetext.com/t/output-panel-hotkey/15628/2
-        def hide_panel(count):
-            window.run_command("hide_panel")
-            if count > 0: sublime.set_timeout(lambda: hide_panel(count-1), 100)
+        def show_panel_build_view():
+            window.focus_view(pipe.dest_view)
 
-        sublime.set_timeout(lambda: hide_panel(20), 100)
-        return None
+        if view_settings.get('buildview.focus_build', False):
+            sublime.set_timeout(show_panel_build_view, 100)
 
 
 class ToggleScrollBottom(sublime_plugin.TextCommand):

@@ -18,4 +18,8 @@
 	// `buildview_silence_modified_warning` in your user/default `Preferences.sublime-settings` to
 	// `false` (literal, not a string wrapped in quotes).
 	"buildview.silence_modified_warning": true,
+
+	// Controls whether automatically change your current view to the `Build
+	// output` creating a new build.
+	"buildview.focus_build": false,
 }
