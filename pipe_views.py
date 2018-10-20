@@ -8,6 +8,7 @@ else:
 def set_settings_listener(instance, settings):
     def callback(*args):
         val = instance.kls_get_value(settings)
+        # print('set_settings_listener, namespace: %-15s key: %-15s value: %-10s' % (instance.namespace, instance.key, val))
         instance.set_value(val)
     settings.add_on_change(instance.namespace, callback)
 
@@ -66,6 +67,7 @@ class PipeViews(object):
         dest_view = self.window.new_file()
         self.dest_view = dest_view
 
+        dest_view.is_build_view_enabled = self.enabled_setting.get_value()
         self.close_old_build_view()
         copy_view_settings(self.source_view, dest_view)
 

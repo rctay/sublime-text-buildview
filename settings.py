@@ -28,6 +28,7 @@ class SettingsDeclaration(object):
     @classmethod
     def kls_get_value(kls, settings=None):
         if not settings:
+            # print( 'BuildView: Calling settings.kls_get_value, sublime.active_window().active_view().settings()' )
             settings = sublime.active_window().active_view().settings()
         value = settings.get("%s.%s" % (kls.namespace, kls.key))
         return value

@@ -77,13 +77,18 @@ class BuildListener(sublime_plugin.EventListener):
 
     def on_modified(self, view):
         pipe = self.pipes.get(view.id(), None)
-        if pipe is None or not pipe.enabled_setting.get_value():
+
+        # print( 'on_modified, pipe: %s, view: %s', ( pipe, view ) )
+        if pipe is None:
+            return
+
+        # print( 'dest_view: %s, enabled_setting: %s (%s)', pipe.dest_view, pipe.enabled_setting.get_value(), is_build_view_enabled )
+        if not pipe.dest_view.is_build_view_enabled:
             return
 
         pipe.pipe_text(view)
 
-        # dest_view has not been created; don't continue on to setting scroll
-        # position, etc.
+        # dest_view has not been created; don't continue on to setting scroll position, etc.
         if pipe.prepare_create:
             return
 
@@ -92,7 +97,8 @@ class BuildListener(sublime_plugin.EventListener):
             pipe.first_update = False
             pipe.dest_view.show(0)
         elif scroll_pos == "bottom" or pipe.last_scroll_region is None:
-            pipe.dest_view.show(pipe.dest_view.size())
+            view_size = pipe.dest_view.size()
+            pipe.dest_view.show( sublime.Region( view_size, view_size ) )
         elif scroll_pos == "last" and pipe.last_scroll_region is not None:
             def fn():
                 pipe.dest_view.set_viewport_position(pipe.last_scroll_region)
@@ -104,6 +110,7 @@ class BuildListener(sublime_plugin.EventListener):
     def on_close(self, view):
         for pipe in self.pipes.values():
             if pipe.dest_view and pipe.dest_view.id() == view.id():
+                pipe.save_view_positions(pipe.dest_view)
                 pipe.dest_view = None
                 # view.window() does not work; so we use
                 # sublime.active_window(). But this again doesn't work on
@@ -126,7 +133,6 @@ class BuildListener(sublime_plugin.EventListener):
         if args and 'select' in args and args['select']:
             return None
 
-        print("Here 3")
         source_view = window.get_output_panel("exec")
         pipe = self.pipes.get(source_view.id())
         if not pipe:
