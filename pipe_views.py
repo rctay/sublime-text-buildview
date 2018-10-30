@@ -52,6 +52,10 @@ class PipeViews(object):
     def close_old_build_view(self):
         views = self.window.views()
 
+        # Do not search for it when there are too much views because this would probably hand Sublime Text
+        if len(views) > 50:
+            return
+
         for view in self.window.views():
             view_name = view.name()
             # print('view_name: `%s`, dest_view_name: `%s`', (view_name, self.dest_view_name))
