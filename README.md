@@ -17,13 +17,44 @@ script and want to have its output handy. (You probably already have a
 The core functionality is done in `pipe_views.PipeViews`, an abstraction
 allowing Unix-like "pipes" to be created between Views in Sublime.
 
-# Usage
+# Installation
 
-The plugin hooks on to the keyboard shortcuts for launching builds; if you
-have different shortcuts for them, change the `.sublime-keymap` files
-accordingly. These bindings **must** have the following context:
+1. Install via Package Control or git clone into your Packages folder (you can
+   browse to it via Preferences -> Browse Packages).
+2. Ensure your build system is set up correctly (eg. Python in the case of the
+   screenshot above).
+3. That's it, you should see build output by pressing the shortcut key to Build
+   (eg. `Ctrl-B` or `⌘-B`).
+
+## Custom Build Key Bindings
+
+If you have different shortcuts for launching builds, you need to modify your
+`.sublime-keymap` files, as this plugin comes baked with configuration to hook
+on to the default Sublime Text keyboard shortcuts for launching builds. These
+bindings **must** have the following context:
 
 	"context": [{"key": "build_fake", "operator":"equal", "operand":true}]
+
+For example, say you have a key binding for F13 to build:
+
+```
+{
+  "keys": ["f13"],  "command": "build",
+},
+```
+
+To configure it to trigger the Buildview plugin, change it like:
+
+```
+{
+  // the usual config...
+  "keys": ["f13"],  "command": "build",
+  // ...this is the extra bit
+  "context": [{"key": "build_fake", "operator":"equal", "operand":true}]
+},
+```
+
+# Configuration
 
 Several aspects of the plugin's behaviour can be changed as detailed below. They
 can be changed on a per-view basis via the Command Palette in either the view
