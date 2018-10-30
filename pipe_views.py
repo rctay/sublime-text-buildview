@@ -52,16 +52,14 @@ class PipeViews(object):
     def close_old_build_view(self):
         views = self.window.views()
 
-        if len(views) > 1:
+        for view in self.window.views():
+            view_name = view.name()
+            # print('view_name: `%s`, dest_view_name: `%s`', (view_name, self.dest_view_name))
 
-            for view in self.window.views():
-                view_name = view.name()
-                # print('view_name: `%s`, dest_view_name: `%s`', (view_name, self.dest_view_name))
-
-                if view.is_scratch() and view_name == self.dest_view_name:
-                    self.window.focus_view(view)
-                    self.save_view_positions(view)
-                    self.window.run_command("close_file")
+            if view.is_scratch() and view_name == self.dest_view_name:
+                self.window.focus_view(view)
+                self.save_view_positions(view)
+                self.window.run_command("close_file")
 
     def create_destination(self):
         dest_view = self.window.new_file()
