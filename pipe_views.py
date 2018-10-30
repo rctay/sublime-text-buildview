@@ -29,8 +29,8 @@ def copy_view_settings(source_view, destine_view):
     settings_names = ['result_file_regex', 'result_line_regex', 'result_base_dir']
 
     for setting_name in settings_names:
-        setting_value = source_settings.get(setting_name)
-        destine_settings.set(setting_name, setting_value)
+        setting_value = source_settings.get(setting_name, None)
+        if setting_value is not None: destine_settings.set(setting_name, setting_value)
 
 
 class PipeViews(object):
@@ -63,9 +63,9 @@ class PipeViews(object):
 
     def create_destination(self):
         dest_view = self.window.new_file()
-        self.dest_view = dest_view
-
         dest_view.is_build_view_enabled = self.enabled_setting.get_value()
+
+        self.dest_view = dest_view
         self.close_old_build_view()
         copy_view_settings(self.source_view, dest_view)
 
