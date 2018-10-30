@@ -30,7 +30,7 @@ can be changed on a per-view basis via the Command Palette in either the view
 source code or with build output, or through settings under `"buildview"`.
 
 Note: it seems settings set via Command Palette are persisted through sublime
-exits/launches.
+exits/launches, so you might not have to edit the JSON `.sublime-settings` files.
 
 
 ## Disabling
