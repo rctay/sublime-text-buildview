@@ -26,7 +26,15 @@ def copy_view_settings(source_view, destine_view):
     source_syntax = source_settings.get('syntax')
     if source_syntax: destine_view.set_syntax_file(source_syntax)
 
-    settings_names = ['result_file_regex', 'result_line_regex', 'result_base_dir']
+    settings_names = [
+        'result_full_regex',
+        'result_real_dir',
+        'result_replaceby',
+
+        'result_file_regex',
+        'result_line_regex',
+        'result_base_dir',
+    ]
 
     for setting_name in settings_names:
         setting_value = source_settings.get(setting_name, None)
