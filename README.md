@@ -17,6 +17,29 @@ script and want to have its output handy. (You probably already have a
 The core functionality is done in `pipe_views.PipeViews`, an abstraction
 allowing Unix-like "pipes" to be created between Views in Sublime.
 
+
+## Installation
+
+### By Package Control
+
+1. Download & Install `Sublime Text 3` (https://www.sublimetext.com/3)
+1. Go to the menu `Tools -> Install Package Control`, then,
+   wait few seconds until the `Package Control` installation finishes
+1. Go to the menu `Preferences -> Package Control`
+1. Type `Package Control Add Channel` on the opened quick panel and press <kbd>Enter</kbd>
+1. Then, input the following address and press <kbd>Enter</kbd>
+   ```
+   https://raw.githubusercontent.com/evandrocoan/StudioChannel/master/channel.json
+   ```
+1. Now, go again to the menu `Preferences -> Package Control`
+1. This time type `Package Control Install Package` on the opened quick panel and press <kbd>Enter</kbd>
+1. Then, search for `BuildView` and press <kbd>Enter</kbd>
+
+See also:
+1. [ITE - Integrated Toolset Environment](https://github.com/evandrocoan/ITE)
+1. [Package control docs](https://packagecontrol.io/docs/usage) for details.
+
+
 # Usage
 
 The plugin hooks on to the keyboard shortcuts for launching builds; if you
@@ -161,7 +184,7 @@ Pull requests welcome!
 
 # Hacking notes
 
- - after editing `pipe_views.py`, restart Sublime or re-save `commands.py` 
+ - after editing `pipe_views.py`, restart Sublime or re-save `commands.py`
    for the changes to take effect.
  - _who's view is it anyway?_ A variety of names are used for views in the
    source code, according to their different roles:
@@ -174,6 +197,6 @@ Pull requests welcome!
 
 # Donate
 
-If you liked this plugin, you can donate here:  
+If you liked this plugin, you can donate here:
 [![Gratipay me!](https://img.shields.io/badge/Donate-gratipay-663300.svg)](https://gratipay.com/~rctay) [![Donate with Bitcoin](https://img.shields.io/badge/Donate-BTC-orange.svg)](https://blockchain.info/address/19xm5wFxyrue9Ncdhw3qLysmYAh7NSxbAc) [![Donate with Ethereum](https://img.shields.io/badge/Donate-ETH-blue.svg)](https://etherscan.io/address/0x1e4625a37f0bC6f37F6785e74Acdcb9C9473A3Ba)
 
