@@ -192,7 +192,7 @@ Pull requests welcome!
 
 # Hacking notes
 
- - after editing `pipe_views.py`, restart Sublime or re-save `commands.py` 
+ - after editing `pipe_views.py`, restart Sublime or re-save `commands.py`
    for the changes to take effect.
  - _who's view is it anyway?_ A variety of names are used for views in the
    source code, according to their different roles:
@@ -205,6 +205,6 @@ Pull requests welcome!
 
 # Donate
 
-If you liked this plugin, you can donate here:  
+If you liked this plugin, you can donate here:
 [![Gratipay me!](https://img.shields.io/badge/Donate-gratipay-663300.svg)](https://gratipay.com/~rctay) [![Donate with Bitcoin](https://img.shields.io/badge/Donate-BTC-orange.svg)](https://blockchain.info/address/19xm5wFxyrue9Ncdhw3qLysmYAh7NSxbAc) [![Donate with Ethereum](https://img.shields.io/badge/Donate-ETH-blue.svg)](https://etherscan.io/address/0x1e4625a37f0bC6f37F6785e74Acdcb9C9473A3Ba)
 
