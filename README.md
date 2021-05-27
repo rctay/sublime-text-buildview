@@ -10,7 +10,7 @@ can't drag it to put it vertically next to your code, like in Eclipse, VS.
 With this plugin, like any other view, you can put your build results where
 you want:
 
-![buildview vertical](https://github.com/rctay/sublime-text-2-buildview/raw/master/buildview.png)
+![buildview vertical](https://github.com/rctay/sublime-text-buildview/raw/master/buildview.png)
 
 This is super useful if you are repeatedly running a program on your code/
 script and want to have its output handy. (You probably already have a
