@@ -1,0 +1,7 @@
+Changes:
+ - Add support for Sublime Text 4, fixes #37
+
+If you liked this plugin, you can donate here:
+BTC: 19xm5wFxyrue9Ncdhw3qLysmYAh7NSxbAc
+ETH: 0x1e4625a37f0bC6f37F6785e74Acdcb9C9473A3Ba
+
