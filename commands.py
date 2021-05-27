@@ -1,6 +1,7 @@
+import re
 import sublime, sublime_plugin
 
-if sublime.version().startswith('3'):
+if re.match('3|4', sublime.version()):
     from .pipe_views import PipeViews, proxy_settings
     from . import settings as settings_bv
 else:
