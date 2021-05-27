@@ -1,4 +1,6 @@
-# A Sublime Text 2/3 plugin to show build output in a view.
+# Buildview
+
+A Sublime Text plugin to show build output in a view.
 
 [![Gratipay me!](https://img.shields.io/badge/Donate-gratipay-663300.svg)](https://gratipay.com/~rctay) [![Donate with Bitcoin](https://img.shields.io/badge/Donate-BTC-orange.svg)](https://blockchain.info/address/19xm5wFxyrue9Ncdhw3qLysmYAh7NSxbAc) [![Donate with Ethereum](https://img.shields.io/badge/Donate-ETH-blue.svg)](https://etherscan.io/address/0x1e4625a37f0bC6f37F6785e74Acdcb9C9473A3Ba)
 
