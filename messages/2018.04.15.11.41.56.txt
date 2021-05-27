@@ -1,0 +1,9 @@
+Fixes:
+ - fix referencing an undeclared variable. Thanks to @Enteleform for opening an
+   issue #33.
+
+If you liked this plugin, you can donate here:
+Gratipay: https://gratipay.com/~rctay
+BTC: 19xm5wFxyrue9Ncdhw3qLysmYAh7NSxbAc
+ETH: 0x1e4625a37f0bC6f37F6785e74Acdcb9C9473A3Ba
+
