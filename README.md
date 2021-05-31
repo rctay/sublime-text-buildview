@@ -35,13 +35,13 @@ If you have different shortcuts for launching builds, you need to modify your
 on to the default Sublime Text keyboard shortcuts for launching builds. These
 bindings **must** have the following context:
 
-```json
+```
 "context": [{"key": "build_fake", "operator":"equal", "operand":true}]
 ```
 
 For example, say you have a key binding for F13 to build:
 
-```json
+```
 {
   "keys": ["f13"],  "command": "build",
 },
@@ -49,7 +49,7 @@ For example, say you have a key binding for F13 to build:
 
 To configure it to trigger the Buildview plugin, change it like:
 
-```json
+```
 {
   // the usual config...
   "keys": ["f13"],  "command": "build",
@@ -84,7 +84,7 @@ projects, by setting `"enabled"` to `false` in
 
 For example, you can add this to your `Preferences.sublime-settings`:
 
-```json
+```
 {
 	...
 	"buildview.enabled": false
@@ -94,7 +94,7 @@ For example, you can add this to your `Preferences.sublime-settings`:
 
 Then in the project's `.sublime-project` file:
 
-```json
+```
 {
 	...
 	"folders": [...],
@@ -169,7 +169,7 @@ the User preference setting:
    buildview hypothetically read settings from a dictionary, and you had in your
    `Preferences.sublime-settings`
 
-   ```json
+   ```
    {
    	...
    	"buildview": {
@@ -182,7 +182,7 @@ the User preference setting:
 
    and you then did this in the project's `.sublime-project` file
 
-   ```json
+   ```
    {
    	...
    	"folders": [...],
