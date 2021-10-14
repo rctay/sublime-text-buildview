@@ -1,9 +1,7 @@
 import sublime, sublime_plugin
 
-if sublime.version().startswith('3'):
-    from . import settings as settings_bv
-else:
-    import settings as settings_bv
+from . import settings as settings_bv
+
 
 def set_settings_listener(instance, settings):
     def callback(*args):

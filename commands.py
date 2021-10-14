@@ -1,11 +1,7 @@
 import sublime, sublime_plugin
 
-if sublime.version().startswith('3'):
-    from .pipe_views import PipeViews, proxy_settings
-    from . import settings as settings_bv
-else:
-    from pipe_views import PipeViews, proxy_settings
-    import settings as settings_bv
+from .pipe_views import PipeViews, proxy_settings
+from . import settings as settings_bv
 
 
 class PlacementPolicy1(object):
