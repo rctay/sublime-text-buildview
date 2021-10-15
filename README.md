@@ -1,6 +1,8 @@
-# A Sublime Text 2/3 plugin to show build output in a view.
+# Buildview
 
-[![Gratipay me!](https://img.shields.io/badge/Donate-gratipay-663300.svg)](https://gratipay.com/~rctay) [![Donate with Bitcoin](https://img.shields.io/badge/Donate-BTC-orange.svg)](https://blockchain.info/address/19xm5wFxyrue9Ncdhw3qLysmYAh7NSxbAc) [![Donate with Ethereum](https://img.shields.io/badge/Donate-ETH-blue.svg)](https://etherscan.io/address/0x1e4625a37f0bC6f37F6785e74Acdcb9C9473A3Ba)
+A Sublime Text plugin to show build output in a view.
+
+[![Donate with Bitcoin](https://img.shields.io/badge/Donate-BTC-orange.svg)](https://blockchain.info/address/19xm5wFxyrue9Ncdhw3qLysmYAh7NSxbAc) [![Donate with Ethereum](https://img.shields.io/badge/Donate-ETH-blue.svg)](https://etherscan.io/address/0x1e4625a37f0bC6f37F6785e74Acdcb9C9473A3Ba)
 
 In Sublime Text, build results are shown in a fixed horizontal panel; you
 can't drag it to put it vertically next to your code, like in Eclipse, VS.
@@ -8,7 +10,7 @@ can't drag it to put it vertically next to your code, like in Eclipse, VS.
 With this plugin, like any other view, you can put your build results where
 you want:
 
-![buildview vertical](https://github.com/rctay/sublime-text-2-buildview/raw/master/buildview.png)
+![buildview vertical](https://github.com/rctay/sublime-text-buildview/raw/master/buildview.png)
 
 This is super useful if you are repeatedly running a program on your code/
 script and want to have its output handy. (You probably already have a
@@ -16,7 +18,6 @@ script and want to have its output handy. (You probably already have a
 
 The core functionality is done in `pipe_views.PipeViews`, an abstraction
 allowing Unix-like "pipes" to be created between Views in Sublime.
-
 
 ## Installation
 
@@ -71,20 +72,53 @@ See also:
 1. [Package control docs](https://packagecontrol.io/docs/usage) for details.
 
 
-# Usage
+# Installation via Default Channel
 
-The plugin hooks on to the keyboard shortcuts for launching builds; if you
-have different shortcuts for them, change the `.sublime-keymap` files
-accordingly. These bindings **must** have the following context:
+1. Install via Package Control or git clone into your Packages folder (you can
+   browse to it via Preferences -> Browse Packages).
+2. Ensure your build system is set up correctly (eg. Python in the case of the
+   screenshot above).
+3. That's it, you should see build output by pressing the shortcut key to Build
+   (eg. `Ctrl-B` or `⌘-B`).
 
-	"context": [{"key": "build_fake", "operator":"equal", "operand":true}]
+## Custom Build Key Bindings
+
+If you have different shortcuts for launching builds, you need to modify your
+`.sublime-keymap` files, as this plugin comes baked with configuration to hook
+on to the default Sublime Text keyboard shortcuts for launching builds. These
+bindings **must** have the following context:
+
+```
+"context": [{"key": "build_fake", "operator":"equal", "operand":true}]
+```
+
+For example, say you have a key binding for F13 to build:
+
+```
+{
+  "keys": ["f13"],  "command": "build",
+},
+```
+
+To configure it to trigger the Buildview plugin, change it like:
+
+```
+{
+  // the usual config...
+  "keys": ["f13"],  "command": "build",
+  // ...this is the extra bit
+  "context": [{"key": "build_fake", "operator":"equal", "operand":true}]
+},
+```
+
+# Configuration
 
 Several aspects of the plugin's behaviour can be changed as detailed below. They
 can be changed on a per-view basis via the Command Palette in either the view
 source code or with build output, or through settings under `"buildview"`.
 
 Note: it seems settings set via Command Palette are persisted through sublime
-exits/launches.
+exits/launches, so you might not have to edit the JSON `.sublime-settings` files.
 
 
 ## Disabling
@@ -103,23 +137,27 @@ projects, by setting `"enabled"` to `false` in
 
 For example, you can add this to your `Preferences.sublime-settings`:
 
-    {
-    	...
-    	"buildview.enabled": false
-    	...
-    }
+```
+{
+	...
+	"buildview.enabled": false
+	...
+}
+```
 
 Then in the project's `.sublime-project` file:
 
-    {
-    	...
-    	"folders": [...]
-    	"settings": {
-    		"buildview.enabled": true,
-    		"buildview.scroll": "top"
-    	}
-    	...
-    }
+```
+{
+	...
+	"folders": [...],
+	"settings": {
+		"buildview.enabled": true,
+		"buildview.scroll": "top"
+	}
+	...
+}
+```
 
 (`"scroll"` added for demonstration; for details on `"scroll"`, refer below.)
 
@@ -184,31 +222,35 @@ the User preference setting:
    buildview hypothetically read settings from a dictionary, and you had in your
    `Preferences.sublime-settings`
 
-       {
-       	...
-       	"buildview": {
-       		"enabled": false,
-       		"scroll": "top"
-       	}
-       	...
-       }
+   ```
+   {
+   	...
+   	"buildview": {
+   		"enabled": false,
+   		"scroll": "top"
+   	}
+   	...
+   }
+   ```
 
    and you then did this in the project's `.sublime-project` file
 
-       {
-       	...
-       	"folders": [...]
-       	"settings": {
-       		"buildview": {
-       			"enabled": true
-       		}
-       	}
-       	...
-       }
+   ```
+   {
+   	...
+   	"folders": [...],
+   	"settings": {
+   		"buildview": {
+   			"enabled": true
+   		}
+   	}
+   	...
+   }
+   ```
 
-    buildview would behave as though the `"scroll"` setting was not defined
-    because sublime does not automatically merge settings dictionaries through
-    the settings hierarchy, so the `"scroll"` setting does not bubble up.
+   buildview would behave as though the `"scroll"` setting was not defined
+   because sublime does not automatically merge settings dictionaries through
+   the settings hierarchy, so the `"scroll"` setting does not bubble up.
 
 
 Pull requests welcome!
@@ -229,5 +271,5 @@ Pull requests welcome!
 # Donate
 
 If you liked this plugin, you can donate here:
-[![Gratipay me!](https://img.shields.io/badge/Donate-gratipay-663300.svg)](https://gratipay.com/~rctay) [![Donate with Bitcoin](https://img.shields.io/badge/Donate-BTC-orange.svg)](https://blockchain.info/address/19xm5wFxyrue9Ncdhw3qLysmYAh7NSxbAc) [![Donate with Ethereum](https://img.shields.io/badge/Donate-ETH-blue.svg)](https://etherscan.io/address/0x1e4625a37f0bC6f37F6785e74Acdcb9C9473A3Ba)
+[![Donate with Bitcoin](https://img.shields.io/badge/Donate-BTC-orange.svg)](https://blockchain.info/address/19xm5wFxyrue9Ncdhw3qLysmYAh7NSxbAc) [![Donate with Ethereum](https://img.shields.io/badge/Donate-ETH-blue.svg)](https://etherscan.io/address/0x1e4625a37f0bC6f37F6785e74Acdcb9C9473A3Ba)
 

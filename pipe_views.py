@@ -1,7 +1,7 @@
+import re
 import sublime, sublime_plugin
 
 from . import settings as settings_bv
-
 
 def set_settings_listener(instance, settings):
     def callback(*args):

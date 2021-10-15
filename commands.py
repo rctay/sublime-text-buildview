@@ -1,8 +1,8 @@
+import re
 import sublime, sublime_plugin
 
 from .pipe_views import PipeViews, proxy_settings
 from . import settings as settings_bv
-
 
 class PlacementPolicy1(object):
     """
