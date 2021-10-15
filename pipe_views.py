@@ -1,14 +1,12 @@
 import re
 import sublime, sublime_plugin
 
-if re.match('3|4', sublime.version()):
-    from . import settings as settings_bv
-else:
-    import settings as settings_bv
+from . import settings as settings_bv
 
 def set_settings_listener(instance, settings):
     def callback(*args):
         val = instance.kls_get_value(settings)
+        # print('set_settings_listener, namespace: %-15s key: %-15s value: %-10s' % (instance.namespace, instance.key, val))
         instance.set_value(val)
     settings.add_on_change(instance.namespace, callback)
 
@@ -18,11 +16,33 @@ def proxy_settings(pipe, settings):
     set_settings_listener(pipe.scroll_setting, settings)
     set_settings_listener(pipe.enabled_setting, settings)
 
+def copy_view_settings(source_view, destine_view):
+    source_settings = source_view.settings()
+    destine_settings = destine_view.settings()
+
+    # print('BuildView setting syntax', source_syntax)
+    source_syntax = source_settings.get('syntax')
+    if source_syntax: destine_view.set_syntax_file(source_syntax)
+
+    settings_names = [
+        'result_full_regex',
+        'result_real_dir',
+        'result_replaceby',
+
+        'result_file_regex',
+        'result_line_regex',
+        'result_base_dir',
+    ]
+
+    for setting_name in settings_names:
+        setting_value = source_settings.get(setting_name, None)
+        if setting_value is not None: destine_settings.set(setting_name, setting_value)
+
 
 class PipeViews(object):
     dest_view_name = "Dest"
 
-    def __init__(self):
+    def __init__(self, source_view):
         self.source_last_pos = 0
         self.is_running = False
         self.prepare_create = False
@@ -33,18 +53,43 @@ class PipeViews(object):
         self.scroll_setting = settings_bv.ScrollSetting()
 
         self.dest_view = None
+        self.source_view = source_view
+
+    def close_old_build_view(self):
+        views = self.window.views()
+
+        # Do not search for it when there are too much views because this would probably hand Sublime Text
+        if len(views) > 50:
+            return
+
+        for view in self.window.views():
+            view_name = view.name()
+            # print('view_name: `%s`, dest_view_name: `%s`', (view_name, self.dest_view_name))
+
+            if view.is_scratch() and view_name == self.dest_view_name:
+                self.window.focus_view(view)
+                self.save_view_positions(view)
+                self.window.run_command("close_file")
 
     def create_destination(self):
         dest_view = self.window.new_file()
+        dest_view.is_build_view_enabled = self.enabled_setting.get_value()
+
+        self.dest_view = dest_view
+        self.close_old_build_view()
+        copy_view_settings(self.source_view, dest_view)
 
         dest_view.set_name(self.dest_view_name)
         dest_view.set_scratch(settings_bv.SilenceModifiedWarningSetting.kls_get_value(dest_view.settings()))
 
-        self.dest_view = dest_view
         proxy_settings(self, dest_view.settings())
         self.on_view_created(self.window, dest_view, self)
 
         return dest_view
+
+    def save_view_positions(self, dest_view):
+        self.last_scroll_region = dest_view.viewport_position()
+        self.last_caret_region = [(selection.begin(), selection.end()) for selection in dest_view.sel()]
 
     def prepare_copy(self, window):
         """
@@ -54,9 +99,12 @@ class PipeViews(object):
         self.source_last_pos = 0
 
         dest_view = self.dest_view
-        if dest_view is not None:
-            self.last_scroll_region = dest_view.viewport_position()
+        # print('dest_view', dest_view)
 
+        if dest_view is not None:
+            copy_view_settings(self.source_view, dest_view)
+
+            self.save_view_positions(dest_view)
             dest_view.run_command('content_clear')
         else:
             self.buffer = ''

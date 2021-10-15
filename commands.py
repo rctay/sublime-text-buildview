@@ -1,13 +1,8 @@
 import re
 import sublime, sublime_plugin
 
-if re.match('3|4', sublime.version()):
-    from .pipe_views import PipeViews, proxy_settings
-    from . import settings as settings_bv
-else:
-    from pipe_views import PipeViews, proxy_settings
-    import settings as settings_bv
-
+from .pipe_views import PipeViews, proxy_settings
+from . import settings as settings_bv
 
 class PlacementPolicy1(object):
     """
@@ -60,6 +55,9 @@ class PlacementPolicy1(object):
 class Pipe(PlacementPolicy1, PipeViews):
     dest_view_name = "Build output"
 
+    def __init__(self, source_view):
+        super(Pipe, self).__init__(source_view)
+
     def on_view_created(self, window, view, pipe):
         group_index, view_index = self.choose_group(window, self.view_launched_build)
         window.set_view_index(view, group_index, view_index)
@@ -75,13 +73,18 @@ class BuildListener(sublime_plugin.EventListener):
 
     def on_modified(self, view):
         pipe = self.pipes.get(view.id(), None)
-        if pipe is None or not pipe.enabled_setting.get_value():
+
+        # print( 'on_modified, pipe: %s, view: %s', ( pipe, view ) )
+        if pipe is None:
+            return
+
+        # print( 'dest_view: %s, enabled_setting: %s (%s)', pipe.dest_view, pipe.enabled_setting.get_value(), is_build_view_enabled )
+        if not pipe.dest_view.is_build_view_enabled:
             return
 
         pipe.pipe_text(view)
 
-        # dest_view has not been created; don't continue on to setting scroll
-        # position, etc.
+        # dest_view has not been created; don't continue on to setting scroll position, etc.
         if pipe.prepare_create:
             return
 
@@ -89,16 +92,21 @@ class BuildListener(sublime_plugin.EventListener):
         if scroll_pos == "top" and pipe.first_update:
             pipe.first_update = False
             pipe.dest_view.show(0)
-        elif scroll_pos == "bottom":
-            pipe.dest_view.show(pipe.dest_view.size())
+        elif scroll_pos == "bottom" or pipe.last_scroll_region is None:
+            view_size = pipe.dest_view.size()
+            pipe.dest_view.show( sublime.Region( view_size, view_size ) )
         elif scroll_pos == "last" and pipe.last_scroll_region is not None:
             def fn():
                 pipe.dest_view.set_viewport_position(pipe.last_scroll_region)
+                pipe.dest_view.sel().clear()
+                for selection in pipe.last_caret_region:
+                    pipe.dest_view.sel().add(sublime.Region(selection[0], selection[1]))
             sublime.set_timeout(fn, 500)
 
     def on_close(self, view):
         for pipe in self.pipes.values():
             if pipe.dest_view and pipe.dest_view.id() == view.id():
+                pipe.save_view_positions(pipe.dest_view)
                 pipe.dest_view = None
                 # view.window() does not work; so we use
                 # sublime.active_window(). But this again doesn't work on
@@ -106,26 +114,25 @@ class BuildListener(sublime_plugin.EventListener):
                 # because (-1, -1) is treated as a null element.
                 pipe.last_placed_group = sublime.active_window().get_view_index(view)
 
-    # The technique used below of hooking on to an existing (possibly built-
-    # in) command was based on kemayo's excellent work [1]. The comment
-    # describing the technique is reproduced here.
-    #
-    # [1] https://github.com/kemayo/sublime-text-2-clipboard-history/blob/ed5cac2a50189f2399e928b4142b19506af5cc6f#clipboard.py
-    #
-    # Here we see a cunning plan. We listen for a key, but never say we
-    # support it. This lets us respond to ctrl-c and ctrl-x, without having
-    # to re-implement the copy and cut commands. (Important, since
-    # run_command("copy") doesn't do anything.)
-    def on_query_context(self, view, key, *args):
-        if key != "build_fake" or not settings_bv.EnabledSetting.kls_get_value(view.settings()):
+    # https://github.com/kemayo/sublime-text-2-clipboard-history/blob/6b07f38a8ab3d38921bccff68a15658f01c10207/clipboard.py#L75
+    def on_window_command(self, window, command_name, args):
+
+        if command_name != 'build':
             return None
 
-        window = view.window()
+        view = window.active_view()
+        view_settings = view.settings()
+
+        if not settings_bv.EnabledSetting.kls_get_value(view_settings):
+            return None
+
+        if args and 'select' in args and args['select']:
+            return None
 
         source_view = window.get_output_panel("exec")
         pipe = self.pipes.get(source_view.id())
         if not pipe:
-            pipe = Pipe()
+            pipe = Pipe(source_view)
             proxy_settings(pipe, view.settings())
 
             self.pipes[source_view.id()] = pipe
@@ -134,24 +141,13 @@ class BuildListener(sublime_plugin.EventListener):
         pipe.view_launched_build = view
         pipe.prepare_copy(window)
 
-        # We cannot call the `hide_panel` directly; it has no effect if we do
-        # so, last I checked in Sublime 2221 and 3103. Not surprising,
-        # considering how most event-loops work. So we employ the (usual) out-
-        # of-band trick.
-        #
-        # It is interesting to note that while `show_panel` accepts the panel
-        # argument, `hide_panel` doesn't. See [1]. Though, [2] gives a hint
-        # that it might work if the panel is specified via contexts instead of
-        # as an argument. But the API (`run_command`) doesn't allow contexts to
-        # be specified, only key bindings in a .sublime-keymap. Hmph.
-        #
         # [1] https://sublimetext.userecho.com/topics/1930-add-panel-param-to-hide_panel-command/
         # [2] https://forum.sublimetext.com/t/output-panel-hotkey/15628/2
-        def hide_panel():
-            window.run_command("hide_panel")
-        sublime.set_timeout(hide_panel, 1)
+        def show_panel_build_view():
+            window.focus_view(pipe.dest_view)
 
-        return None
+        if view_settings.get('buildview.focus_build', False):
+            sublime.set_timeout(show_panel_build_view, 100)
 
 
 class ToggleScrollBottom(sublime_plugin.TextCommand):
